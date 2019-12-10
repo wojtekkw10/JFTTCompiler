@@ -17,30 +17,32 @@ buildscript {
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
+
+    //Apply the antlr java parser generator plugin
     id 'antlr'
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
 }
 
-apply plugin: 'antlr'
+//apply plugin: 'antlr'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {
     // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
 
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.0-jre'
+
+    // Java parser generator
     antlr "org.antlr:antlr4:4.7.2"
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
-
-
 
 application {
     // Define the main class for the application.
@@ -49,12 +51,4 @@ application {
 
 generateGrammarSource {
     outputDirectory = file("src/main/java/parser")
-}
-
-jar {
-  manifest {
-    attributes(
-      'Main-Class': 'compiler.App'
-    )
-  }
 }
