@@ -7,11 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class App {
 
     public static void main(String[] args){
@@ -36,3 +31,8 @@ public class App {
         else System.err.println("> Error: Syntax Errors");
     }
 }
+
+
+/*TODO: Sygnalizowanie błędu
+  TODO: niewłaściwe użycie nazwy tablicy lub zmiennej
+ */

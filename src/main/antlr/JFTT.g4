@@ -3,7 +3,7 @@ grammar JFTT;
     package parser;
 }
 
-BLANK:         [ \n\t\r] -> skip;
+BLANK:         [ \t\r\n] -> skip;
 COMMENT:       '['.*?']' -> skip;
 PIDENTIFIER:   [_a-z]+;
 NUM:           '-'?[0-9]+;
@@ -27,11 +27,14 @@ command       : identifier 'ASSIGN' expression';'
               | 'IF' condition 'THEN' commands 'ENDIF'
               | 'WHILE' condition 'DO' commands 'ENDWHILE'
               | 'DO' commands 'WHILE' condition 'ENDDO'
-              | 'FOR' PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR'
-              | 'FOR' PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR'
+              | upfor
+              | downfor
               | 'READ' identifier';'
               | 'WRITE' value';'
               ;
+
+upfor:        'FOR' PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR';
+downfor:      'FOR' PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR';
 
 expression    : value
               | value 'PLUS' value

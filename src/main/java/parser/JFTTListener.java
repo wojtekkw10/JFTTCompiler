@@ -50,6 +50,26 @@ public interface JFTTListener extends ParseTreeListener {
 	 */
 	void exitCommand(JFTTParser.CommandContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link JFTTParser#upfor}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpfor(JFTTParser.UpforContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JFTTParser#upfor}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpfor(JFTTParser.UpforContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JFTTParser#downfor}.
+	 * @param ctx the parse tree
+	 */
+	void enterDownfor(JFTTParser.DownforContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JFTTParser#downfor}.
+	 * @param ctx the parse tree
+	 */
+	void exitDownfor(JFTTParser.DownforContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link JFTTParser#expression}.
 	 * @param ctx the parse tree
 	 */
