@@ -7,10 +7,15 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
+import java.io.IOException;
+
 public class App {
 
-    public static void main(String[] args) {
-        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString("BEGIN a ASSIGN b; END"));
+    public static void main(String[] args){
+        BaseArgParser argumentParser = new ArgParser();
+        argumentParser.parse(args);
+
+        JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
         JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
 
         ParseTreeWalker walker = new ParseTreeWalker();
