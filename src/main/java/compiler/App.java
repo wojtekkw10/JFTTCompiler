@@ -3,19 +3,21 @@
  */
 package compiler;
 import org.antlr.v4.runtime.*;
-import parser.ParserLexer;
-import parser.ParserParser;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import parser.JFTTLexer;
+import parser.JFTTParser;
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        ParserLexer lexer = new ParserLexer(CharStreams.fromString("Hello Joasddadahn!"));
-        ParserParser parser = new ParserParser(new CommonTokenStream(lexer));
+        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString("BEGIN a ASSIGN b; END"));
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
 
-        String name = parser.main().getText();
-        System.out.println(name);
+        ParseTreeWalker walker = new ParseTreeWalker();
+        SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator();
+        walker.walk(symbolTableGenerator, parser.program());
+
+        if( parser.getNumberOfSyntaxErrors() == 0 ) System.out.println("> Symbol Table Created Successfully");
+        else System.err.println("> Error: Syntax Errors");
     }
 }
