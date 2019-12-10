@@ -5,12 +5,12 @@ Simple compiler for JFTT class at the Wrocław University of Science and Technol
 gradle 6.0.1 \
 openjdk 11.0.5-ea 2019-10-15
 
-## To run
+## To build and run the compiler, and then the vm
 ```shell script
-make run
+make vm
 ```
 
 ## To build and run jar file
 ```shell script
-make jar
+make run
 ```

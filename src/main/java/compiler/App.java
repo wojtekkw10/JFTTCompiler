@@ -7,20 +7,32 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class App {
 
     public static void main(String[] args){
+        //Parsing program parameters
         BaseArgParser argumentParser = new ArgParser();
         argumentParser.parse(args);
 
+        //Creating Lexer
         JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
-        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
 
+        //Creating the Symbol Table
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
         ParseTreeWalker walker = new ParseTreeWalker();
         SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator();
         walker.walk(symbolTableGenerator, parser.program());
+        System.out.println(symbolTableGenerator);
 
-        if( parser.getNumberOfSyntaxErrors() == 0 ) System.out.println("> Symbol Table Created Successfully");
+
+        if( parser.getNumberOfSyntaxErrors() == 0 ) {
+            System.out.println("> Symbol Table Created Successfully");
+        }
         else System.err.println("> Error: Syntax Errors");
     }
 }

@@ -1,10 +1,10 @@
 compile:
 	./gradlew run
 
-jar:
+run:
 	./gradlew shadowjar
 	java -jar build/libs/compiler-all.jar input output
 
-run: jar
+vm: run
 	vm/maszyna-wirtualna output
 

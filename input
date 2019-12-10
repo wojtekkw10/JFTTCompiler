@@ -1,5 +1,5 @@
 DECLARE
-    a, b
+    a, b, c(100:1002)
 BEGIN
     READ a;
     IF a GEQ 0 THEN
@@ -15,3 +15,4 @@ BEGIN
 	ENDWHILE
     ENDIF
 END
+
