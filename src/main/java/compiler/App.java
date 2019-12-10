@@ -7,8 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
-import java.io.IOException;
-
 public class App {
 
     public static void main(String[] args){
