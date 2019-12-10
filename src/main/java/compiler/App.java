@@ -32,7 +32,6 @@ public class App {
     }
 }
 
-
-/*TODO: Sygnalizowanie błędu
-  TODO: niewłaściwe użycie nazwy tablicy lub zmiennej
- */
+//TODO: refactor
+//TODO: different stages of checking for errors in different classes that have common function check()
+//TODO: Put them in an array and run in a sequence
