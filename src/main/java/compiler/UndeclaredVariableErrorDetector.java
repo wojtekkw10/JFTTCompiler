@@ -41,13 +41,15 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
         if(!symbolTable.containsKey(name1)) {
             addError(new Error(line, "Undeclared variable "+name1));
         }else{
-            if(ctx.PIDENTIFIER(1) == null && symbolTable.get(name1).isArray()) addError(new Error(line, "Array used as a variable"));
+            if(ctx.PIDENTIFIER(1) == null && symbolTable.get(name1).isArray()) addError(new Error(line, "Array "+name1+" used as a variable"));
         }
 
         String name2;
-        if(ctx.PIDENTIFIER(1) != null) {
-            name2 = ctx.PIDENTIFIER(1).getText();
-            if(!symbolTable.containsKey(name2)) addError(new Error(line, "Undeclared variable "+name2));
+        if(ctx.PIDENTIFIER(1) != null || ctx.NUM()!=null) {
+            if(ctx.PIDENTIFIER(1) != null){
+                name2 = ctx.PIDENTIFIER(1).getText();
+                if(!symbolTable.containsKey(name2)) addError(new Error(line, "Undeclared variable "+name2));
+            }
 
             if(!symbolTable.get(name1).isArray()) addError(new Error(line, "Variable "+name1+" used as an array"));
         }

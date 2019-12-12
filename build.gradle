@@ -52,3 +52,11 @@ application {
 generateGrammarSource {
     outputDirectory = file("src/main/java/parser")
 }
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "started", "skipped", "passed", "failed"
+        showStandardStreams true
+    }
+}

@@ -8,3 +8,6 @@ run:
 vm: run
 	vm/maszyna-wirtualna output
 
+test:
+	./gradlew test
+

@@ -17,19 +17,18 @@ public class App {
         JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
         JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
 
-
+        //Running parser
         ParserManager parserManager = new ParserManager();
         parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
         parserManager.runAll(parser);
+
+        //Printing errors
         System.out.println(parserManager.printErrors());
 
+        //Printing the symbolTable
         System.out.println(parserManager.printSymbolTable());
 
 
     }
 }
-
-//TODO: refactor
-//TODO: different stages of checking for errors in different classes that have common function check()
-//TODO: Put them in an array and run in a sequence
