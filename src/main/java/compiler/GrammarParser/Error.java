@@ -1,8 +1,8 @@
-package compiler;
+package compiler.GrammarParser;
 
 public class Error {
     int line;
-    String message;
+    public String message;
 
     Error(int line, String message){
         this.line = line;

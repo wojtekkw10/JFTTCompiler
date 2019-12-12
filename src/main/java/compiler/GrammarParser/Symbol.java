@@ -1,4 +1,4 @@
-package compiler;
+package compiler.GrammarParser;
 
 public class Symbol {
     IdentifierType type;
@@ -10,6 +10,8 @@ public class Symbol {
     long rangeEnd;
 
     private Boolean isDefined;
+
+    public int location;
 
     Symbol(IdentifierType type){
         this.type = type;
@@ -25,6 +27,10 @@ public class Symbol {
 
     public Boolean isArray(){
         return isArray;
+    }
+
+    public long getRangeLength(){
+        return rangeEnd - rangeStart + 1;
     }
 
 

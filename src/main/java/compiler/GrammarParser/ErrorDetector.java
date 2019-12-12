@@ -1,4 +1,4 @@
-package compiler;
+package compiler.GrammarParser;
 
 import parser.JFTTBaseListener;
 

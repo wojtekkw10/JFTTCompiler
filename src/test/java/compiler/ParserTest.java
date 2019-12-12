@@ -1,6 +1,9 @@
 package compiler;
 
-import org.antlr.v4.runtime.CharStream;
+import compiler.GrammarParser.Error;
+import compiler.GrammarParser.ParserManager;
+import compiler.GrammarParser.UndeclaredVariableErrorDetector;
+import compiler.GrammarParser.VariableRedefinitionErrorDetector;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-public class ParserTest {
+public class ParserTest{
 
     @Test
     public void undeclaredVariableError() {

@@ -1,9 +1,6 @@
-package compiler;
+package compiler.GrammarParser;
 
-import parser.JFTTBaseListener;
 import parser.JFTTParser;
-
-import java.util.HashMap;
 
 import static parser.JFTTLexer.PIDENTIFIER;
 

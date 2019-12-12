@@ -4,12 +4,14 @@ DONE:
 - building symbol table
 - detecting variable redefinitions errors
 - detecting undefined variable errors and using variable/array name in the wrong context
-
-TODO:
 - fix nullPointerExceptions when detecting parser errors
 - add unit tests for the parser
+
+DOING:
 - add declarations code generator
 - add READ and WRITE code generation
+
+TODO:
 - add ASSIGN code generation
 - add EXPRESSION code generation
 - add IF code generation

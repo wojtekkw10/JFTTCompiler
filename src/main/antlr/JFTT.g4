@@ -7,6 +7,7 @@ BLANK:         [ \t\r\n] -> skip;
 COMMENT:       '['.*?']' -> skip;
 PIDENTIFIER:   [_a-z]+;
 NUM:           '-'?[0-9]+;
+READ:           'READ';
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
               | 'BEGIN' commands 'END'
@@ -29,9 +30,10 @@ command       : identifier 'ASSIGN' expression';'
               | 'DO' commands 'WHILE' condition 'ENDDO'
               | upfor
               | downfor
-              | 'READ' identifier';'
+              | READ identifier';'
               | 'WRITE' value';'
               ;
+
 
 upfor:        'FOR' PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR';
 downfor:      'FOR' PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR';

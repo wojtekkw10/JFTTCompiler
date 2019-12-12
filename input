@@ -1,6 +1,7 @@
 [ sito Eratostenesa ]
 DECLARE
-    n,  c(1:2), n, n
+    n,  c(1:2), d, e, f(100: 110), h
 BEGIN
-    n ASSIGN n(2);
+    READ n;
+    READ d;
 END

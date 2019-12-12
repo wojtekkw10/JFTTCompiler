@@ -1,4 +1,4 @@
-package compiler;
+package compiler.GrammarParser;
 
 public enum IdentifierType {
     VARIABLE,

@@ -1,4 +1,4 @@
-package compiler;
+package compiler.ProgramArgumentParser;
 
 import org.antlr.v4.runtime.CharStreams;
 

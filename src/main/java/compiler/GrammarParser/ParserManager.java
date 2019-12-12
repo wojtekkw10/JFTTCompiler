@@ -1,4 +1,4 @@
-package compiler;
+package compiler.GrammarParser;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTParser;
@@ -38,8 +38,8 @@ public class ParserManager {
 
     public String printErrors(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("\n####### ERRORS ##############################\n");
-        stringBuilder.append("#############################################\n");
+        stringBuilder.append("\n####### ERRORS #################################\n");
+        stringBuilder.append("################################################\n");
         for(Error error: errors){
             stringBuilder.append("> Error: ").append(error.message).append(" in line ").append(error.line);
             stringBuilder.append("\n");
