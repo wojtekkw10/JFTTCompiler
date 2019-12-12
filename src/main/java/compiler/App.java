@@ -22,8 +22,9 @@ public class App {
         parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
         parserManager.runAll(parser);
+        System.out.println(parserManager.printErrors());
 
-        System.out.println(parserManager);
+        System.out.println(parserManager.printSymbolTable());
 
 
     }

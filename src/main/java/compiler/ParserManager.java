@@ -1,8 +1,6 @@
 package compiler;
 
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import parser.JFTTLexer;
 import parser.JFTTParser;
 
 import java.util.ArrayList;
@@ -11,6 +9,7 @@ import java.util.HashMap;
 public class ParserManager {
     ArrayList<ErrorDetector> errorDetectors = new ArrayList<>();
     HashMap<String, Symbol> symbolTable = new HashMap<>();
+    ArrayList<Error> errors = new ArrayList<>();
 
     public void addErrorDetector(ErrorDetector errorDetector){
         errorDetectors.add(errorDetector);
@@ -20,8 +19,15 @@ public class ParserManager {
        for (ErrorDetector errorDetector : errorDetectors) {
            ParseTreeWalker walker = new ParseTreeWalker();
            errorDetector.setSymbolTable(symbolTable);
+
+           //run the parser
            walker.walk(errorDetector, parser.program());
+
+           //getting feedback from parsers
            symbolTable = errorDetector.getSymbolTable();
+           errors.addAll(errorDetector.getErrors());
+
+           //reset the parser to point at the beginning
            parser.reset();
        }
    }
@@ -30,8 +36,17 @@ public class ParserManager {
         return symbolTable;
     }
 
-    @Override
-    public String toString() {
+    public String printErrors(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Errors");
+        for(Error error: errors){
+            stringBuilder.append("> Error: ").append(error.message).append(" in line ").append(error.line);
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public String printSymbolTable() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Symbol Table\n");
         int columnWidth = 8;

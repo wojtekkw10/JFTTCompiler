@@ -5,18 +5,21 @@ import parser.JFTTParser;
 
 import java.util.HashMap;
 
+import static parser.JFTTLexer.PIDENTIFIER;
+
 public class VariableRedefinitionErrorDetector extends ErrorDetector {
 
     @Override
     public void enterDeclarations(JFTTParser.DeclarationsContext ctx) {
+        int line = ctx.getToken(PIDENTIFIER,0).getSymbol().getLine();
 
         String name = ctx.PIDENTIFIER().getText();
-        if (isDeclared(name)) System.out.println("> Error: Redefinition of an identifier: " + name);
+        if (isDeclared(name)) addError(new Error(line, "Redefinition of an identifier "+name));
         else {
             if (isArray(ctx)) {
                 long rangeStart = getRange(ctx, 0);
                 long rangeEnd = getRange(ctx, 1);
-                if(rangeStart > rangeEnd) System.out.println("> Error: Incorrect array range definition");
+                if(rangeStart > rangeEnd) addError(new Error(line, "Incorrect array range definition: "+name));
                 else{
                     Symbol s = new Symbol(IdentifierType.ARRAY);
                     s.setArray(rangeStart, rangeEnd);
