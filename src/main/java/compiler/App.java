@@ -23,11 +23,20 @@ public class App {
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
         parserManager.runAll(parser);
 
-        //Printing errors
-        System.out.println(parserManager.printErrors());
+        if(parserManager.getErrors().size()>0) {
+            //Printing errors
+            System.out.println(parserManager.printErrors());
+            return;
+        }
+        else{
+            //Printing the symbolTable
+            System.out.println(parserManager.printSymbolTable());
 
-        //Printing the symbolTable
-        System.out.println(parserManager.printSymbolTable());
+            //Generate code
+            //...
+        }
+
+
 
 
     }

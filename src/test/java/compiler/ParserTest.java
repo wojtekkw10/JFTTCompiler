@@ -106,11 +106,7 @@ public class ParserTest {
 
     @Test
     public void variableUsedAsArrayError2() {
-        String query = "DECLARE" +
-                "n, c(1:2)" +
-                "BEGIN" +
-                "n ASSIGN n(n);" +
-                "END";
+        String query = "DECLARE n, c(1:2) BEGIN n ASSIGN n(n); END";
 
         //Creating lexer
         JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
@@ -128,11 +124,7 @@ public class ParserTest {
 
     @Test
     public void arrayUsedAsVariableError() {
-        String query = "DECLARE" +
-                "n, c(1:2)" +
-                "BEGIN" +
-                "n ASSIGN c;" +
-                "END";
+        String query = "DECLARE n, c(1:2) BEGIN n ASSIGN c; END";
 
         //Creating lexer
         JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
@@ -146,5 +138,59 @@ public class ParserTest {
 
         ArrayList<Error> errors = parserManager.getErrors();
         assertEquals(errors.get(0).message, "Array c used as a variable");
+    }
+
+    @Test
+    public void noDeclarationSection() {
+        String query = "BEGIN IF 5 EQ 5 THEN WRITE 5; ENDIF END";
+
+        //Creating lexer
+        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
+
+        //Running parser
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+
+        ArrayList<Error> errors = parserManager.getErrors();
+        assertEquals(errors.size(), 0);
+    }
+
+    @Test
+    public void noDeclarationSectionErrors() {
+        String query = "BEGIN a ASSIGN b(c); END";
+
+        //Creating lexer
+        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
+
+        //Running parser
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+
+        ArrayList<Error> errors = parserManager.getErrors();
+        assertEquals(errors.size(), 3);
+    }
+
+    @Test
+    public void noDeclarationSectionErrors2() {
+        String query = "BEGIN a ASSIGN b(2); END";
+
+        //Creating lexer
+        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
+
+        //Running parser
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+
+        ArrayList<Error> errors = parserManager.getErrors();
+        assertEquals(errors.size(), 2);
     }
 }

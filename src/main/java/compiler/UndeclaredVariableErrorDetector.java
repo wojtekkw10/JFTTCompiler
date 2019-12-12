@@ -51,7 +51,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
                 if(!symbolTable.containsKey(name2)) addError(new Error(line, "Undeclared variable "+name2));
             }
 
-            if(!symbolTable.get(name1).isArray()) addError(new Error(line, "Variable "+name1+" used as an array"));
+            if(symbolTable.containsKey(name1) && !symbolTable.get(name1).isArray()) addError(new Error(line, "Variable "+name1+" used as an array"));
         }
 
 
