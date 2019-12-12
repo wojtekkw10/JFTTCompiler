@@ -1,0 +1,6 @@
+[ sito Eratostenesa ]
+DECLARE
+    n,  c(1:2), n, n
+BEGIN
+    n ASSIGN n(2);
+END

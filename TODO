@@ -1,0 +1,19 @@
+DONE:
+- lexer
+- parser
+- building symbol table
+- detecting variable redefinitions errors
+- detecting undefined variable errors and using variable/array name in the wrong context
+
+TODO:
+- fix nullPointerExceptions when detecting parser errors
+- add unit tests for the parser
+- add declarations code generator
+- add READ and WRITE code generation
+- add ASSIGN code generation
+- add EXPRESSION code generation
+- add IF code generation
+- add CONDITION code generation
+- add WHILE code generation
+- add DO WHILE code generation
+- add FOR code generation

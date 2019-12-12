@@ -3,19 +3,41 @@
  */
 package compiler;
 import org.antlr.v4.runtime.*;
-import parser.ParserLexer;
-import parser.ParserParser;
+import parser.JFTTLexer;
+import parser.JFTTParser;
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
-    public static void main(String[] args) {
-        ParserLexer lexer = new ParserLexer(CharStreams.fromString("Hello Joasddadahn!"));
-        ParserParser parser = new ParserParser(new CommonTokenStream(lexer));
+    public static void main(String[] args){
+        //Parsing program parameters
+        BaseArgParser argumentParser = new ArgParser();
+        argumentParser.parse(args);
 
-        String name = parser.main().getText();
-        System.out.println(name);
+        //Creating Lexer
+        JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
+
+        //Running parser
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+
+        if(parserManager.getErrors().size()>0) {
+            //Printing errors
+            System.out.println(parserManager.printErrors());
+            return;
+        }
+        else{
+            //Printing the symbolTable
+            System.out.println(parserManager.printSymbolTable());
+
+            //Generate code
+            //...
+        }
+
+
+
+
     }
 }

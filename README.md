@@ -2,11 +2,19 @@
 Simple compiler for JFTT class at the Wrocław University of Science and Technology
 
 ## Dependencies
-gradle 6.0.1
-openjdk 11.0.5-ea 2019-10-15
+By default the file 'input' is used as input for the compiler. 
+'output' is the output file of the compiler and the input file for the VM.
+### openjdk 11.0.5-ea 2019-10-15
+```shell script
+sudo apt install openjdk-11-jdk
+```
 
-## To run
+## To build and run the compiler, and then the vm
+```shell script
+make vm
+```
+
+## To build and run jar file
+```shell script
 make run
-
-## To create a jar file
-make jar
+```
