@@ -3,7 +3,6 @@
  */
 package compiler;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
@@ -16,19 +15,18 @@ public class App {
 
         //Creating Lexer
         JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
-
-        //Creating the Symbol Table
         JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
-        ParseTreeWalker walker = new ParseTreeWalker();
-        SymbolTableGenerator symbolTableGenerator = new SymbolTableGenerator();
-        walker.walk(symbolTableGenerator, parser.program());
-        System.out.println(symbolTableGenerator);
 
 
-        if( parser.getNumberOfSyntaxErrors() == 0 ) {
-            System.out.println("> Symbol Table Created Successfully");
-        }
-        else System.err.println("> Error: Syntax Errors");
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+        System.out.println(parserManager.printErrors());
+
+        System.out.println(parserManager.printSymbolTable());
+
+
     }
 }
 

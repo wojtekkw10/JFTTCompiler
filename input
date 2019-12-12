@@ -1,10 +1,10 @@
 [ sito Eratostenesa ]
 DECLARE
-    n, j, sito(2:100)
+    n,  sito(2:100), n, pw(2:1)
 BEGIN
     n ASSIGN 100;
     FOR k FROM n DOWNTO 2 DO
-        sito(k) ASSIGN 1;
+        sito(k) ASSIGN n(j);
     ENDFOR
     FOR i FROM 2 TO n DO
         IF sito(i) NEQ 0 THEN
