@@ -43,13 +43,17 @@ public class App {
             //Printing the symbolTable
             System.out.println(parserManager.printSymbolTable());
 
+
+
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            codeGeneratorManager.assignIdentifierLocations();
-            System.out.println(codeGeneratorManager.printMemoryIdentifierAssigment());
+            codeGeneratorManager.assignIdentifierLocations(8);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode());
+            System.out.println(codeGeneratorManager.memoryManager.printMemory());
+
+
             //...
 
             try (PrintStream out = new PrintStream(new FileOutputStream(argumentParser.getOutputFilename()))) {

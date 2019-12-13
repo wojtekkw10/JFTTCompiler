@@ -1,7 +1,9 @@
 package compiler.GrammarParser;
 
-public class Symbol {
+public class Symbol{
     IdentifierType type;
+    String name;
+    int additionalArraySpace = 3;
 
     long value;
     Boolean isArray;
@@ -11,16 +13,18 @@ public class Symbol {
 
     private Boolean isDefined;
 
-    public int location;
+    public long location;
 
-    Symbol(IdentifierType type){
+    public Symbol(IdentifierType type, String name){
+        this.name = name;
         this.type = type;
         this.isDefined = false;
         if(IdentifierType.ARRAY == type) isArray = true;
         else isArray = false;
+        location = -1;
     }
 
-    void setArray(long rangeStart, long rangeEnd){
+    public void setArray(long rangeStart, long rangeEnd){
         this.rangeStart = rangeStart;
         this.rangeEnd = rangeEnd;
     }
@@ -33,5 +37,23 @@ public class Symbol {
         return rangeEnd - rangeStart + 1;
     }
 
+    public long getRangeEnd() {
+        return rangeEnd;
+    }
 
+    public long getRangeStart() {
+        return rangeStart;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAdditionalArraySpace() {
+        return additionalArraySpace;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -8,6 +8,7 @@ COMMENT:       '['.*?']' -> skip;
 PIDENTIFIER:   [_a-z]+;
 NUM:           '-'?[0-9]+;
 READ:           'READ';
+WRITE:          'WRITE';
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
               | 'BEGIN' commands 'END'
@@ -31,7 +32,7 @@ command       : identifier 'ASSIGN' expression';'
               | upfor
               | downfor
               | READ identifier';'
-              | 'WRITE' value';'
+              | WRITE value';'
               ;
 
 

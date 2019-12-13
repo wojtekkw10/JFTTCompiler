@@ -10,6 +10,9 @@ import org.junit.Test;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -194,6 +197,28 @@ public class ParserTest{
         parserManager.runAll(parser);
 
         ArrayList<Error> errors = parserManager.getErrors();
-        assertEquals(errors.size(), 2);
+        assertEquals(2, errors.size());
+    }
+
+    @Test
+    public void arrayUsedAsVariableError2() {
+        String query = "DECLARE\n" +
+                "    n,  c(1:2), d, e, f(100: 110), h\n" +
+                "BEGIN\n" +
+                "    READ c(1);\n" +
+                "END";
+
+        //Creating lexer
+        JFTTLexer lexer = new JFTTLexer(CharStreams.fromString(query));
+        JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
+
+        //Running parser
+        ParserManager parserManager = new ParserManager();
+        parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
+        parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.runAll(parser);
+
+        ArrayList<Error> errors = parserManager.getErrors();
+        assertEquals(0, errors.size());
     }
 }

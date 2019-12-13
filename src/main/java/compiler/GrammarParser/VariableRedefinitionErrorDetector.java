@@ -18,12 +18,12 @@ public class VariableRedefinitionErrorDetector extends ErrorDetector {
                 long rangeEnd = getRange(ctx, 1);
                 if(rangeStart > rangeEnd) addError(new Error(line, "Incorrect array range definition: "+name));
                 else{
-                    Symbol s = new Symbol(IdentifierType.ARRAY);
+                    Symbol s = new Symbol(IdentifierType.ARRAY, name);
                     s.setArray(rangeStart, rangeEnd);
                     symbolTable.put(name, s);
                 }
             } else {
-                symbolTable.put(name, new Symbol(IdentifierType.VARIABLE));
+                symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
             }
         }
     }

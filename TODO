@@ -12,6 +12,7 @@ DOING:
 - add READ and WRITE code generation
 
 TODO:
+- array index out of range Error
 - add ASSIGN code generation
 - add EXPRESSION code generation
 - add IF code generation

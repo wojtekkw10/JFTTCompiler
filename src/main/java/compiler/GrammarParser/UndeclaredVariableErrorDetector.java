@@ -9,7 +9,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     @Override
     public void enterUpfor(JFTTParser.UpforContext ctx) {
         String name = ctx.PIDENTIFIER().getText();
-        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE));
+        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
     }
 
     @Override
@@ -21,7 +21,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     @Override
     public void enterDownfor(JFTTParser.DownforContext ctx) {
         String name = ctx.PIDENTIFIER().getText();
-        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE));
+        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
         if(!symbolTable.containsKey(name1)) {
             addError(new Error(line, "Undeclared variable "+name1));
         }else{
-            if(ctx.PIDENTIFIER(1) == null && symbolTable.get(name1).isArray()) addError(new Error(line, "Array "+name1+" used as a variable"));
+            if((ctx.PIDENTIFIER(1) == null && ctx.NUM()== null ) && symbolTable.get(name1).isArray()) addError(new Error(line, "Array "+name1+" used as a variable"));
         }
 
         String name2;

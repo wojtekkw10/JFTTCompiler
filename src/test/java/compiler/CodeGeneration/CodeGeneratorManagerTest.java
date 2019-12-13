@@ -27,9 +27,9 @@ public class CodeGeneratorManagerTest {
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
         parserManager.runAll(parser);
 
-        CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable());
+        CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
         codeGeneratorManager.assignIdentifierLocations();
         String result = codeGeneratorManager.printMemoryIdentifierAssigment();
-        assertEquals("[ a:1 b:2 c:3 d:6 e:7 f:18 ]", result);
+        assertEquals("[ a:1 b:2 c:3 d:9 e:10 f:24 ]", result);
     }
 }
