@@ -29,13 +29,14 @@ public class CodeGenerator extends JFTTBaseListener {
 
         if(ctx.READ()!=null){
             String name = ctx.identifier().PIDENTIFIER(0).getText();
-            generatedCode.add(new Command(CommandType.GET, 0));
+
             //Checking what kind of identifier
             if(ctx.identifier().NUM()!=null){
                 //READ a(5);
                 long num = Long.parseLong(ctx.identifier().NUM().getText());
                 long shift = num - symbolTable.get(name).getRangeStart();
                 long location = symbolTable.get(name).location+shift;
+                generatedCode.add(new Command(CommandType.GET, 0));
                 generatedCode.add(new Command(CommandType.STORE, location));
                 System.out.println("Variable placed at "+location);
             }
@@ -43,18 +44,20 @@ public class CodeGenerator extends JFTTBaseListener {
                 //READ a(b);
                 // _______table_rangeStart_rangeEnd_tableLocation________
                 Symbol b = symbolTable.get(ctx.identifier().PIDENTIFIER(1).getText());
-                long bRangeStartLocation = b.location+b.getRangeLength();
-                long bLocation = b.location+b.getRangeLength()+3;
+
+                Symbol a = symbolTable.get(ctx.identifier().PIDENTIFIER(0).getText());
+                long aRangeStartLocation = a.location+a.getRangeLength();
+                long aLocation = a.location+a.getRangeLength()+2;
 
                 Symbol tmp = memoryManager.getFreeSpace();
 
                 long memoryLocation = tmp.location;
-                generatedCode.add(new Command(CommandType.LOAD, bRangeStartLocation));
+                generatedCode.add(new Command(CommandType.LOAD, aRangeStartLocation));
                 generatedCode.add(new Command(CommandType.STORE, memoryLocation));
-                generatedCode.add(new Command(CommandType.LOADI, b.location));
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
                 generatedCode.add(new Command(CommandType.SUB, memoryLocation));
                 generatedCode.add(new Command(CommandType.STORE, memoryLocation));
-                generatedCode.add(new Command(CommandType.LOAD, bLocation));
+                generatedCode.add(new Command(CommandType.LOAD, aLocation));
                 generatedCode.add(new Command(CommandType.ADD, memoryLocation));
                 generatedCode.add(new Command(CommandType.STORE, memoryLocation));
                 generatedCode.add(new Command(CommandType.GET, 0));
@@ -66,6 +69,7 @@ public class CodeGenerator extends JFTTBaseListener {
 
             } else{
                 //READ n;
+                generatedCode.add(new Command(CommandType.GET, 0));
                 generatedCode.add(new Command(CommandType.STORE, symbolTable.get(name).location));
             }
 

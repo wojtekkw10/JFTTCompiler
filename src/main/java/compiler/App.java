@@ -47,7 +47,7 @@ public class App {
 
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            codeGeneratorManager.assignIdentifierLocations(8);
+            codeGeneratorManager.assignIdentifierLocations(16);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode());

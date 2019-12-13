@@ -1,6 +1,6 @@
 DECLARE
-    n,  e(-100:-90), d, c(2:6), f(100: 110), h
+    n,  e(-100:-95), d, c(2:6), f(100: 102), h
 BEGIN
     READ n;
-    WRITE n;
+    READ e(n);
 END

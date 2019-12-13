@@ -27,6 +27,8 @@ public class CodeGeneratorManager {
                 memoryManager.allocate(symbolTable.get(key));
             }
         }
+
+        generatedCode.addAll(generateArrayInfo());
     }
 
     private ArrayList<Command> generateArrayInfo(){
@@ -34,15 +36,28 @@ public class CodeGeneratorManager {
 
         for(String key : symbolTable.keySet()){
             if(symbolTable.get(key).isArray()){
-                long rangeStart = symbolTable.get(key).getRangeStart();
-                long rangeEnd = symbolTable.get(key).getRangeEnd();
-                long location = symbolTable.get(key).location;
+                Symbol s = symbolTable.get(key);
+                long rangeStart = s.getRangeStart();
+                long rangeEnd = s.getRangeEnd();
+                long location = s.location;
 
+                long rangeStartLocation = s.location+s.getRangeLength();
+                long rangeEndLocation = s.location+s.getRangeLength()+1;
+                long locationLocation = s.location+s.getRangeLength()+2;
+
+                commands.addAll(generateNumber(rangeStart));
+                commands.add(new Command(CommandType.STORE, rangeStartLocation));
+
+                commands.addAll(generateNumber(rangeEnd));
+                commands.add(new Command(CommandType.STORE, rangeEndLocation));
+
+                commands.addAll(generateNumber(location));
+                commands.add(new Command(CommandType.STORE, locationLocation));
 
             }
         }
 
-        return null;
+        return commands;
 
     }
 
@@ -66,7 +81,7 @@ public class CodeGeneratorManager {
         //getting feedback from parsers
         generatedCode.addAll(codeGenerator.getGeneratedCode());
 
-        generatedCode.addAll(generateNumber(389));
+        generatedCode.addAll(generateNumber(-389));
         generatedCode.add(new Command(CommandType.STORE, 50));
 
 
@@ -161,14 +176,20 @@ public class CodeGeneratorManager {
         ArrayList<Command> commands = new ArrayList<>();
         commands.add(new Command(CommandType.SUB, 0));
 
+        Boolean isNegative = false;
+        if(number<0) {
+            number = -number;
+            isNegative = true;
+        }
+
         String stringNumber = Long.toBinaryString(number);
         int length = stringNumber.length();
         for(int i=0; i<stringNumber.length(); i++){
             int digit = Integer.parseInt(stringNumber.substring(i,i+1));
             long loc = symbolTable.get("2^"+(length-i-1)).location;
             if(digit==1){
-                if(number<0) commands.add(new Command(CommandType.SUB, loc));
-                commands.add(new Command(CommandType.ADD, loc));
+                if(isNegative) commands.add(new Command(CommandType.SUB, loc));
+                else commands.add(new Command(CommandType.ADD, loc));
             }
 
         }
