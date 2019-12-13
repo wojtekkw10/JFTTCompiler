@@ -86,8 +86,8 @@ public class CodeGeneratorManager {
 
 
         for(int i=0; i<51; i++){
-            generatedCode.add(new Command(CommandType.LOAD, i));
-            generatedCode.add(new Command(CommandType.PUT, 0));
+            //generatedCode.add(new Command(CommandType.LOAD, i));
+            //generatedCode.add(new Command(CommandType.PUT, 0));
         }
 
         generatedCode.add(new Command(CommandType.HALT, 0));

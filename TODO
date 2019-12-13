@@ -6,16 +6,18 @@ DONE:
 - detecting undefined variable errors and using variable/array name in the wrong context
 - fix nullPointerExceptions when detecting parser errors
 - add unit tests for the parser
+- writing array info to memory (behind arrays)
+- add declarations code generator
+- add READ code generation
+- add WRITE code generation
 
 DOING:
-- add declarations code generator
-- add READ and WRITE code generation
-- writing array info to memory (behind arrays)
+- add ASSIGN code generation
+- add EXPRESSION code generation
 
 TODO:
 - array index out of range Error
-- add ASSIGN code generation
-- add EXPRESSION code generation
+
 - add IF code generation
 - add CONDITION code generation
 - add WHILE code generation

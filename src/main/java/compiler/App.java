@@ -50,7 +50,7 @@ public class App {
             codeGeneratorManager.assignIdentifierLocations(16);
 
             codeGeneratorManager.generateCode();
-            System.out.println(codeGeneratorManager.printGeneratedCode());
+            //System.out.println(codeGeneratorManager.printGeneratedCode());
             System.out.println(codeGeneratorManager.memoryManager.printMemory());
 
 

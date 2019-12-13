@@ -2,5 +2,6 @@ DECLARE
     n,  e(-100:-95), d, c(2:6), f(100: 102), h
 BEGIN
     READ n;
-    READ e(n);
+    READ c(n);
+    WRITE c(n);
 END
