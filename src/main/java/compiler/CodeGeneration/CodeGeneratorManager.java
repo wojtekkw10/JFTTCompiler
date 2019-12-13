@@ -29,6 +29,23 @@ public class CodeGeneratorManager {
         }
     }
 
+    private ArrayList<Command> generateArrayInfo(){
+        ArrayList<Command> commands = new ArrayList<>();
+
+        for(String key : symbolTable.keySet()){
+            if(symbolTable.get(key).isArray()){
+                long rangeStart = symbolTable.get(key).getRangeStart();
+                long rangeEnd = symbolTable.get(key).getRangeEnd();
+                long location = symbolTable.get(key).location;
+
+
+            }
+        }
+
+        return null;
+
+    }
+
     public String printMemoryIdentifierAssigment(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[ ");
@@ -49,13 +66,17 @@ public class CodeGeneratorManager {
         //getting feedback from parsers
         generatedCode.addAll(codeGenerator.getGeneratedCode());
 
+        generatedCode.addAll(generateNumber(389));
+        generatedCode.add(new Command(CommandType.STORE, 50));
 
-        for(int i=0; i<50; i++){
+
+        for(int i=0; i<51; i++){
             generatedCode.add(new Command(CommandType.LOAD, i));
             generatedCode.add(new Command(CommandType.PUT, 0));
         }
 
         generatedCode.add(new Command(CommandType.HALT, 0));
+
     }
 
     public String printGeneratedCode(){
@@ -75,7 +96,7 @@ public class CodeGeneratorManager {
         return stringBuilder.toString();
     }
 
-    public void generatePowersOf2Array(int maxPower){
+    private void generatePowersOf2Array(int maxPower){
         //ASSEMBLER
         if(maxPower<4) System.out.println("MaxPower should be at least 4");
 
@@ -135,5 +156,25 @@ public class CodeGeneratorManager {
 
     }
 
+    private ArrayList<Command> generateNumber(long number){
+        //The number is stored in p0
+        ArrayList<Command> commands = new ArrayList<>();
+        commands.add(new Command(CommandType.SUB, 0));
+
+        String stringNumber = Long.toBinaryString(number);
+        int length = stringNumber.length();
+        for(int i=0; i<stringNumber.length(); i++){
+            int digit = Integer.parseInt(stringNumber.substring(i,i+1));
+            long loc = symbolTable.get("2^"+(length-i-1)).location;
+            if(digit==1){
+                if(number<0) commands.add(new Command(CommandType.SUB, loc));
+                commands.add(new Command(CommandType.ADD, loc));
+            }
+
+        }
+
+        return commands;
+
+    }
 
 }

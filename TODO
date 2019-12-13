@@ -10,6 +10,7 @@ DONE:
 DOING:
 - add declarations code generator
 - add READ and WRITE code generation
+- writing array info to memory (behind arrays)
 
 TODO:
 - array index out of range Error
