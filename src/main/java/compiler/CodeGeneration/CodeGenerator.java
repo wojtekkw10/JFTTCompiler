@@ -135,7 +135,7 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.DEC,0));
 
                 long LoopLine = generatedCode.size();
-                generatedCode.add(new Command(CommandType.JNEG, LoopLine+33));
+                generatedCode.add(new Command(CommandType.JNEG, LoopLine+27));
 
                 //INNER LOOP
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
@@ -144,7 +144,7 @@ public class CodeGenerator extends JFTTBaseListener {
 
                 //generatedCode.add(new Command(CommandType.INC, remaining.location));
                 long innerLoopLine = generatedCode.size();
-                generatedCode.add(new Command(CommandType.JNEG, innerLoopLine+12));
+                generatedCode.add(new Command(CommandType.JNEG, innerLoopLine+11));
                 //UPDATE multiplier
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("-2^0").location));
@@ -153,7 +153,6 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.LOAD, shiftCounter.location));
                 generatedCode.add(new Command(CommandType.DEC, 0));
                 generatedCode.add(new Command(CommandType.STORE,shiftCounter.location));
-                generatedCode.add(new Command(CommandType.PUT, 0));
 
                 //condition
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
@@ -161,10 +160,6 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.DEC, remaining.location));
                 generatedCode.add(new Command(CommandType.JUMP, innerLoopLine));
                 //END INNERLOOP
-                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
-                generatedCode.add(new Command(CommandType.PUT, multiplier.location));
-                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
-                generatedCode.add(new Command(CommandType.PUT, multiplier.location));
 
 
                 //Result += multiplier * a;
@@ -177,7 +172,6 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.LOAD, result.location));
                 generatedCode.add(new Command(CommandType.ADD, tmp.location));
                 generatedCode.add(new Command(CommandType.STORE, result.location));
-                generatedCode.add(new Command(CommandType.PUT, 0));
                 memoryManager.removeVariable(tmp);
 
                 //left -= multiplier;
@@ -194,8 +188,13 @@ public class CodeGenerator extends JFTTBaseListener {
 
 
                 generatedCode.add(new Command(CommandType.LOAD, result.location));
-                generatedCode.add(new Command(CommandType.PUT, 0));
                 generatedCode.addAll(generateStoreCodeForIdentifier(id));
+
+                memoryManager.removeVariable(multiplier);
+                memoryManager.removeVariable(remaining);
+                memoryManager.removeVariable(result);
+                memoryManager.removeVariable(shiftCounter);
+                memoryManager.removeVariable(a);
 
             }
             else if(expr.DIV()!=null){
