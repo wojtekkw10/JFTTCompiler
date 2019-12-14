@@ -47,23 +47,40 @@ public class App {
 
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            codeGeneratorManager.assignIdentifierLocations(16);
+            codeGeneratorManager.assignIdentifierLocations(32);
 
             codeGeneratorManager.generateCode();
-            //System.out.println(codeGeneratorManager.printGeneratedCode());
+            System.out.println(codeGeneratorManager.printGeneratedCode(true));
             System.out.println(codeGeneratorManager.memoryManager.printMemory());
 
 
             //...
 
             try (PrintStream out = new PrintStream(new FileOutputStream(argumentParser.getOutputFilename()))) {
-                out.print(codeGeneratorManager.printGeneratedCode());
+                out.print(codeGeneratorManager.printGeneratedCode(false));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
 
+        //Mnożenie w JAVA
+        int a = 5;
+        int b = 46;
+        int mnożnik = 1;
+        int left = b;
+        int wynik = 0;
+        while(mnożnik - left <= 0) mnożnik *= 2;
+        while(left>0){
+            while(mnożnik - 1  > left) {
+                //stricte wieksze
+                mnożnik /= 2;
+            }
+            wynik += mnożnik * a;
+            left = left - mnożnik;
+        }
+        System.out.println(left);
 
+        System.out.println(wynik);
 
 
     }

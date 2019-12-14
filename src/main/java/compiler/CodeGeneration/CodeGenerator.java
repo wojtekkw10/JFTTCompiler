@@ -10,13 +10,14 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class CodeGenerator extends JFTTBaseListener {
-    public ArrayList<Command> generatedCode = new ArrayList<>();
+    public ArrayList<Command> generatedCode;
     HashMap<String, Symbol> symbolTable;
     MemoryManager memoryManager;
 
-    public CodeGenerator(HashMap<String, Symbol> symbolTable, MemoryManager memoryManager){
+    public CodeGenerator(HashMap<String, Symbol> symbolTable, MemoryManager memoryManager, ArrayList<Command> generatedCode){
         this.symbolTable = symbolTable;
         this.memoryManager = memoryManager;
+        this.generatedCode = generatedCode;
 
     }
 
@@ -36,21 +37,180 @@ public class CodeGenerator extends JFTTBaseListener {
 
         }
         if(ctx.WRITE()!=null){
-            //WRITE NUM
-            if(ctx.value().NUM()!=null){
-                long number = Long.parseLong(ctx.value().NUM().getText());
-                generatedCode.addAll(generateNumber(number));
-            }
-            else {
-                //WRITE identifier
-                generatedCode.addAll(generateLoadCodeForIdentifier(ctx.value().identifier()));
-            }
+            //WRITE value;
+            generatedCode.addAll(generateLoadCodeForValue(ctx.value()));
             generatedCode.add(new Command(CommandType.PUT, 0));
-
         }
         if(ctx.ASSIGN()!=null){
             JFTTParser.IdentifierContext id = ctx.identifier();
             JFTTParser.ExpressionContext expr = ctx.expression();
+
+            //FIRST expression store result in accumulator
+            //THEN store accumulator in id //using function generateStoreCodeForIdentifier
+
+            if(expr.PLUS()!=null){
+                //expression -> value PLUS value
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                Symbol tmp = memoryManager.getFreeSpace();
+                generatedCode.add(new Command(CommandType.STORE, tmp.location));
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                generatedCode.add(new Command(CommandType.ADD, tmp.location));
+                generatedCode.addAll(generateStoreCodeForIdentifier(id));
+                memoryManager.removeVariable(tmp);
+            }
+            else if(expr.MINUS()!=null){
+                //expression -> value MINUS value
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                Symbol tmp = memoryManager.getFreeSpace();
+                generatedCode.add(new Command(CommandType.STORE, tmp.location));
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                generatedCode.add(new Command(CommandType.SUB, tmp.location));
+                generatedCode.addAll(generateStoreCodeForIdentifier(id));
+                memoryManager.removeVariable(tmp);
+
+            }
+            else if(expr.TIMES()!=null){
+                //        //Mnożenie w JAVA
+                //        int a = 5;
+                //        int b = 46;
+                //        int mnożnik = 1;
+                //        int left = b;
+                //        int wynik = 0;
+                //        while(mnożnik - left <= 0) mnożnik *= 2;
+                //        while(left>0){
+                //            while(mnożnik - 1  > left) {
+                //                //stricte wieksze
+                //                mnożnik /= 2;
+                //            }
+                //            wynik += mnożnik * a;
+                //            left = left - mnożnik;
+                //        }
+
+                //expression -> value TIMES value
+                Symbol multiplier = memoryManager.getFreeSpace();
+                Symbol remaining = memoryManager.getFreeSpace();
+                Symbol result = memoryManager.getFreeSpace();
+                Symbol shiftCounter = memoryManager.getFreeSpace();
+                Symbol a = memoryManager.getFreeSpace();
+
+                //Copy variables to tmp memory
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                generatedCode.add(new Command(CommandType.STORE, a.location));
+
+                //Copy variables to tmp memory
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.INC, 0));
+                generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+
+                //while(mnożnik - left <= 0) mnożnik *= 2;
+                Command c = new Command(CommandType.COMMENT, 0);
+                c.setComment("Multiplication");
+                //generatedCode.add(c);
+
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                long JPOSLine = generatedCode.size();
+
+                //LOOP
+                generatedCode.add(new Command(CommandType.JPOS, JPOSLine+10));
+                //UPDATE multiplier
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location)); //p1 = 1
+                generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+                //UPDATE shiftCounter
+                generatedCode.add(new Command(CommandType.LOAD, shiftCounter.location));
+                generatedCode.add(new Command(CommandType.INC, 0)); //p1 = 1
+                generatedCode.add(new Command(CommandType.STORE,shiftCounter.location));
+
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, JPOSLine));
+                //ENDLOOP
+
+                //LOOP
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.DEC,0));
+
+                long LoopLine = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JNEG, LoopLine+33));
+
+                //INNER LOOP
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.DEC, remaining.location));
+
+                //generatedCode.add(new Command(CommandType.INC, remaining.location));
+                long innerLoopLine = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JNEG, innerLoopLine+12));
+                //UPDATE multiplier
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("-2^0").location));
+                generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+                //UPDATE shiftCounter
+                generatedCode.add(new Command(CommandType.LOAD, shiftCounter.location));
+                generatedCode.add(new Command(CommandType.DEC, 0));
+                generatedCode.add(new Command(CommandType.STORE,shiftCounter.location));
+                generatedCode.add(new Command(CommandType.PUT, 0));
+
+                //condition
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.DEC, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, innerLoopLine));
+                //END INNERLOOP
+                generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
+                generatedCode.add(new Command(CommandType.PUT, multiplier.location));
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.PUT, multiplier.location));
+
+
+                //Result += multiplier * a;
+                Symbol tmp = memoryManager.getFreeSpace();
+                generatedCode.add(new Command(CommandType.LOAD, a.location));
+
+                generatedCode.add(new Command(CommandType.SHIFT, shiftCounter.location));
+
+                generatedCode.add(new Command(CommandType.STORE, tmp.location));
+                generatedCode.add(new Command(CommandType.LOAD, result.location));
+                generatedCode.add(new Command(CommandType.ADD, tmp.location));
+                generatedCode.add(new Command(CommandType.STORE, result.location));
+                generatedCode.add(new Command(CommandType.PUT, 0));
+                memoryManager.removeVariable(tmp);
+
+                //left -= multiplier;
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, multiplier.location));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location)); //1
+
+
+
+                //condition
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.DEC,0));
+                generatedCode.add(new Command(CommandType.JUMP, LoopLine));
+
+
+                generatedCode.add(new Command(CommandType.LOAD, result.location));
+                generatedCode.add(new Command(CommandType.PUT, 0));
+                generatedCode.addAll(generateStoreCodeForIdentifier(id));
+
+            }
+            else if(expr.DIV()!=null){
+                //expression -> value DIV value
+
+            }
+            else if(expr.MOD()!=null){
+                //expression -> value MOD value
+
+            }
+            else{
+                //expression -> value
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                generatedCode.addAll(generateStoreCodeForIdentifier(id));
+            }
 
 
         }
@@ -107,12 +267,18 @@ public class CodeGenerator extends JFTTBaseListener {
 
 
     //LOADS the id to accumulator
-    ArrayList<Command> generateLoadCodeForIdentifier(JFTTParser.IdentifierContext id){
+    ArrayList<Command> generateLoadCodeForValue(JFTTParser.ValueContext value){
         //identifier -> PIDENTIFIER
         //            | PIDENTIFIER'('PIDENTIFIER')'
         //            | PIDENTIFIER'('NUM')'
         ArrayList<Command> commands = new ArrayList<>();
-        if(id.NUM()!=null){
+        JFTTParser.IdentifierContext id = value.identifier();
+
+        if(value.NUM()!=null){
+            long number = Long.parseLong(value.NUM().getText());
+            generatedCode.addAll(generateNumber(number));
+        }
+        else if(id.NUM()!=null){
             //a(5);
             String name = id.PIDENTIFIER(0).getText();
             long num = Long.parseLong(id.NUM().getText());

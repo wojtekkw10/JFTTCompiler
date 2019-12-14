@@ -1,11 +1,31 @@
 DECLARE
-    n,  e(-100:-95), d, c(2:6), f(100: 102), h
+    n,  e(-100:-95), d, c(2:6), f(100: 102), h, a, b, k
 BEGIN
-    READ n;
+    [READ n;
     READ c(n);
     READ c(5);
     WRITE c(5);
     WRITE c(n);
     WRITE n;
     WRITE 56;
+
+    h ASSIGN 5 PLUS 5;
+    WRITE h;
+
+    n ASSIGN 10;
+    f(101) ASSIGN 43;
+    h ASSIGN n PLUS f(101);
+    WRITE h;
+
+    c(5) ASSIGN 23;
+    e(-96) ASSIGN 10;
+    f(100) ASSIGN e(-96) PLUS c(5);
+    WRITE f(100);
+
+    a ASSIGN 15;
+    b ASSIGN 2;
+    k ASSIGN a MINUS b;
+    WRITE k;]
+
+    k ASSIGN 1000000 TIMES 1000000;
 END

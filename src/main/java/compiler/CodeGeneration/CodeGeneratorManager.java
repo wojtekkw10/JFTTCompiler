@@ -72,17 +72,14 @@ public class CodeGeneratorManager {
     }
 
     public void generateCode(){
-        CodeGenerator codeGenerator = new CodeGenerator(symbolTable, memoryManager);
+        CodeGenerator codeGenerator = new CodeGenerator(symbolTable, memoryManager, generatedCode);
         ParseTreeWalker walker = new ParseTreeWalker();
 
         //run the parser
         walker.walk(codeGenerator, parser.program());
 
         //getting feedback from parsers
-        generatedCode.addAll(codeGenerator.getGeneratedCode());
-
-        generatedCode.addAll(generateNumber(-389));
-        generatedCode.add(new Command(CommandType.STORE, 50));
+        generatedCode = codeGenerator.getGeneratedCode();
 
 
         for(int i=0; i<51; i++){
@@ -94,18 +91,23 @@ public class CodeGeneratorManager {
 
     }
 
-    public String printGeneratedCode(){
+    public String printGeneratedCode(Boolean withLineNumbers){
         StringBuilder stringBuilder = new StringBuilder();
+        int counter = 0;
         for(Command command : generatedCode){
+            if(withLineNumbers) stringBuilder.append(counter).append(": ");
             if(command.command == CommandType.GET || command.command == CommandType.PUT ||
                     command.command == CommandType.HALT || command.command == CommandType.INC ||
                     command.command == CommandType.DEC )
             {
                 stringBuilder.append(command.command.toString()).append("\n");
+            } else if(command.command == CommandType.COMMENT){
+                stringBuilder.append("#").append(command.comment).append("\n");
             }
             else{
                 stringBuilder.append(command.command.toString()).append(" ").append(command.argument).append("\n");
             }
+            counter++;
 
         }
         return stringBuilder.toString();
@@ -116,6 +118,14 @@ public class CodeGeneratorManager {
         if(maxPower<4) System.out.println("MaxPower should be at least 4");
 
         int arrayIndex = 1;
+        //-1
+        generatedCode.add(new Command(CommandType.SUB, 0));
+        generatedCode.add(new Command(CommandType.DEC, 0));
+        generatedCode.add(new Command(CommandType.STORE, arrayIndex));
+        arrayIndex++;
+        Symbol ss = memoryManager.getFreeSpace();
+        ss.setName("-2^0");
+        symbolTable.put("-2^0", ss);
 
         //The first 3 powers: 1,2,4
         generatedCode.add(new Command(CommandType.SUB, 0));
