@@ -3,5 +3,9 @@ DECLARE
 BEGIN
     READ n;
     READ c(n);
+    READ c(5);
+    WRITE c(5);
     WRITE c(n);
+    WRITE n;
+    WRITE 56;
 END

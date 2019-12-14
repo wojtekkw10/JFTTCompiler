@@ -16,8 +16,8 @@ DOING:
 - add EXPRESSION code generation
 
 TODO:
+- add generating number out of scope
 - array index out of range Error
-
 - add IF code generation
 - add CONDITION code generation
 - add WHILE code generation

@@ -10,6 +10,14 @@ NUM:           '-'?[0-9]+;
 READ:           'READ';
 WRITE:          'WRITE';
 
+ASSIGN:         'ASSIGN';
+PLUS:           'PLUS';
+MINUS:          'MINUS';
+TIMES:          'TIMES';
+DIV:            'DIV';
+MOD:            'MOD';
+
+
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
               | 'BEGIN' commands 'END'
               ;
@@ -24,7 +32,7 @@ commands      : commands command
               | command
               ;
 
-command       : identifier 'ASSIGN' expression';'
+command       : identifier ASSIGN expression';'
               | 'IF' condition 'THEN' commands 'ELSE' commands 'ENDIF'
               | 'IF' condition 'THEN' commands 'ENDIF'
               | 'WHILE' condition 'DO' commands 'ENDWHILE'
@@ -40,11 +48,11 @@ upfor:        'FOR' PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR';
 downfor:      'FOR' PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR';
 
 expression    : value
-              | value 'PLUS' value
-              | value 'MINUS' value
-              | value 'TIMES' value
-              | value 'DIV' value
-              | value 'MOD' value
+              | value PLUS value
+              | value MINUS value
+              | value TIMES value
+              | value DIV value
+              | value MOD value
               ;
 
 condition     : value 'EQ' value
