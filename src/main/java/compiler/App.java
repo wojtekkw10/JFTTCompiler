@@ -64,21 +64,28 @@ public class App {
         }
 
         //Mnożenie w JAVA
-        int a = 5;
-        int b = 46;
+        int a = 100;
+        int b = 2;
         int mnożnik = 1;
-        int left = b;
+        int left = a;
         int wynik = 0;
-        while(mnożnik - left <= 0) mnożnik *= 2;
-        while(left>0){
-            while(mnożnik - 1  > left) {
-                //stricte wieksze
-                mnożnik /= 2;
-            }
-            wynik += mnożnik * a;
-            left = left - mnożnik;
+        while(mnożnik < left) {
+            mnożnik *= 2;
         }
-        System.out.println(left);
+        while(left>b){
+            int tmp2 = mnożnik * b;
+
+            while(tmp2 > left) {
+                //stricte wieksze
+                tmp2/=2;
+                mnożnik /= 2;
+
+            }
+            wynik += mnożnik;
+            //System.out.println(mnożnik);
+            //System.out.println(wynik);
+            left = left - tmp2;
+        }
 
         System.out.println(wynik);
 

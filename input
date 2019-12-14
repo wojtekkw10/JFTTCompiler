@@ -27,6 +27,10 @@ BEGIN
     k ASSIGN a MINUS b;
     WRITE k;]
 
-    k ASSIGN 1000000 TIMES 1000000;
+    [k ASSIGN 32 TIMES 32;
+    WRITE k;]
+
+    k ASSIGN 1000 DIV 25;
+    k ASSIGN k TIMES 2;
     WRITE k;
 END
