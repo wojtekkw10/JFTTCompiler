@@ -65,16 +65,15 @@ public class App {
 
         //Mnożenie w JAVA
         int a = 100;
-        int b = 2;
+        int b = 4;
         int mnożnik = 1;
         int left = a;
         int wynik = 0;
         while(mnożnik < left) {
             mnożnik *= 2;
         }
-        while(left>b){
-            int tmp2 = mnożnik * b;
-
+        int tmp2 = mnożnik * b;
+        while(left>=b){
             while(tmp2 > left) {
                 //stricte wieksze
                 tmp2/=2;
@@ -82,8 +81,6 @@ public class App {
 
             }
             wynik += mnożnik;
-            //System.out.println(mnożnik);
-            //System.out.println(wynik);
             left = left - tmp2;
         }
 

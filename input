@@ -30,7 +30,8 @@ BEGIN
     [k ASSIGN 32 TIMES 32;
     WRITE k;]
 
-    k ASSIGN 1000 DIV 25;
-    k ASSIGN k TIMES 2;
+    [k ASSIGN 10;]
+    k ASSIGN 100 DIV 4;
+    [k ASSIGN k TIMES 2;]
     WRITE k;
 END

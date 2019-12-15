@@ -106,20 +106,21 @@ public class CodeGenerator extends JFTTBaseListener {
 
             }
             else if(expr.DIV()!=null){
-                //        int a = 107;
-                //        int b = 5;
+                //         int a = 100;
+                //        int b = 4;
                 //        int mnożnik = 1;
                 //        int left = a;
                 //        int wynik = 0;
-                //        while(mnożnik - left <= 0) {
+                //        while(mnożnik < left) {
                 //            mnożnik *= 2;
                 //        }
-                //        while(left - b >= 0 ){
-                //            int tmp2 = mnożnik * b;
-                //            while(tmp2 - left > 0) {
+                //        int tmp2 = mnożnik * b;
+                //        while(left>=b){
+                //            while(tmp2 > left) {
                 //                //stricte wieksze
                 //                tmp2/=2;
                 //                mnożnik /= 2;
+                //
                 //            }
                 //            wynik += mnożnik;
                 //            left = left - tmp2;
@@ -168,16 +169,15 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.JUMP, JPOSLine));
                 //ENDLOOP
 
+                Symbol tmp2 = memoryManager.getFreeSpace();
+                generateMultiplicationCode(multiplier, b);
+                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
+
                 //LOOP
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
                 generatedCode.add(new Command(CommandType.SUB, b.location));
                 long loopLine = generatedCode.size();
-                Symbol tmp2 = memoryManager.getFreeSpace();
-                generatedCode.add(new Command(CommandType.JNEG, loopLine+80));
-
-                generateMultiplicationCode(multiplier, b);
-                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
-
+                generatedCode.add(new Command(CommandType.JNEG, loopLine+25));
 
                 //INNER LOOP
                 generatedCode.add(new Command(CommandType.LOAD, tmp2.location));
