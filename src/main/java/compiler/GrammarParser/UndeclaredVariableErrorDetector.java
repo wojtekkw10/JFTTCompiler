@@ -7,27 +7,19 @@ import static parser.JFTTLexer.PIDENTIFIER;
 public class UndeclaredVariableErrorDetector extends ErrorDetector {
 
     @Override
-    public void enterUpfor(JFTTParser.UpforContext ctx) {
-        String name = ctx.PIDENTIFIER().getText();
-        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
+    public void enterCommand(JFTTParser.CommandContext ctx) {
+        if(ctx.FOR()!=null){
+            String name = ctx.PIDENTIFIER().getText();
+            symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
+        }
     }
 
     @Override
-    public void exitUpfor(JFTTParser.UpforContext ctx) {
-        String name = ctx.PIDENTIFIER().getText();
-        symbolTable.remove(name);
-    }
-
-    @Override
-    public void enterDownfor(JFTTParser.DownforContext ctx) {
-        String name = ctx.PIDENTIFIER().getText();
-        symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
-    }
-
-    @Override
-    public void exitDownfor(JFTTParser.DownforContext ctx) {
-        String name = ctx.PIDENTIFIER().getText();
-        symbolTable.remove(name);
+    public void exitCommand(JFTTParser.CommandContext ctx) {
+        if(ctx.FOR()!=null){
+            String name = ctx.PIDENTIFIER().getText();
+            symbolTable.remove(name);
+        }
     }
 
     @Override

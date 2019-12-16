@@ -16,6 +16,8 @@ MINUS:          'MINUS';
 TIMES:          'TIMES';
 DIV:            'DIV';
 MOD:            'MOD';
+FOR:            'FOR';
+
 
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
@@ -37,15 +39,11 @@ command       : identifier ASSIGN expression';'
               | 'IF' condition 'THEN' commands 'ENDIF'
               | 'WHILE' condition 'DO' commands 'ENDWHILE'
               | 'DO' commands 'WHILE' condition 'ENDDO'
-              | upfor
-              | downfor
+              | FOR PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR'
+              | FOR PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR'
               | READ identifier';'
               | WRITE value';'
               ;
-
-
-upfor:        'FOR' PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR';
-downfor:      'FOR' PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR';
 
 expression    : value
               | value PLUS value
