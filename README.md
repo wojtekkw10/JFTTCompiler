@@ -8,6 +8,12 @@ By default the file 'input' is used as input for the compiler.
 ```shell script
 sudo apt install openjdk-11-jdk
 ```
+### cln 1.3.5
+```shell script
+cd cln-directory
+./configure
+sudo make install
+```
 
 ## To build and run the compiler, and then the vm
 ```shell script

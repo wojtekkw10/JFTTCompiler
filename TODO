@@ -16,6 +16,7 @@ DOING:
 - add EXPRESSION code generation
 
 TODO:
+- add multiplication and division for negative numbers
 - add generating number out of scope
 - array index out of range Error
 - add IF code generation
