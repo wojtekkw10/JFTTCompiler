@@ -16,6 +16,8 @@ DOING:
 - add EXPRESSION code generation
 
 TODO:
+- number out of LONG scope
+- unit tests
 - add multiplication and division for negative numbers
 - add generating number out of scope
 - array index out of range Error

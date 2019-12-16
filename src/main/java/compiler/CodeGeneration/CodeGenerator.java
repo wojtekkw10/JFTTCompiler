@@ -114,10 +114,11 @@ public class CodeGenerator extends JFTTBaseListener {
                 //        int mnożnik = 1;
                 //        int left = a;
                 //        int wynik = 0;
+                //        int tmp2 = b;
                 //        while(mnożnik < left) {
                 //            mnożnik *= 2;
+                //            tmp2 *= 2;
                 //        }
-                //        int tmp2 = mnożnik * b;
                 //        while(left>=b){
                 //            while(tmp2 > left) {
                 //                //stricte wieksze
@@ -150,6 +151,11 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.INC, 0));
                 generatedCode.add(new Command(CommandType.STORE, multiplier.location));
 
+                Symbol tmp2 = memoryManager.getFreeSpace();
+                //tmp2 = b
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
+
                 //while(mnożnik - left <= 0) mnożnik *= 2;
                 Command c = new Command(CommandType.COMMENT, 0);
                 c.setComment("Multiplication");
@@ -160,24 +166,25 @@ public class CodeGenerator extends JFTTBaseListener {
                 long JPOSLine = generatedCode.size();
 
                 //LOOP
-                generatedCode.add(new Command(CommandType.JPOS, JPOSLine+10));
+                generatedCode.add(new Command(CommandType.JPOS, JPOSLine+13));
                 //UPDATE multiplier
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location)); //p1 = 1
                 generatedCode.add(new Command(CommandType.STORE, multiplier.location));
                 //UPDATE shiftCounter
                 generatedCode.add(new Command(CommandType.LOAD, shiftCounter.location));
-                generatedCode.add(new Command(CommandType.INC, 0)); //p1 = 1
+                generatedCode.add(new Command(CommandType.INC, 0));
                 generatedCode.add(new Command(CommandType.STORE,shiftCounter.location));
+
+                generatedCode.add(new Command(CommandType.LOAD, tmp2.location));
+                generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location));
+                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SUB, remaining.location));
                 generatedCode.add(new Command(CommandType.JUMP, JPOSLine));
                 //ENDLOOP
 
-                Symbol tmp2 = memoryManager.getFreeSpace();
-                generateMultiplicationCode(multiplier, b);
-                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 //LOOP
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
@@ -520,6 +527,7 @@ public class CodeGenerator extends JFTTBaseListener {
         Symbol result = memoryManager.getFreeSpace();
         Symbol shiftCounter = memoryManager.getFreeSpace();
         Symbol a = memoryManager.getFreeSpace();
+        Symbol isNegative = memoryManager.getFreeSpace();
 
         //Copy variables to tmp memory
         generatedCode.add(new Command(CommandType.LOAD, a1.location));
@@ -528,6 +536,15 @@ public class CodeGenerator extends JFTTBaseListener {
         //Copy variables to tmp memory
         generatedCode.add(new Command(CommandType.LOAD, b.location));
         generatedCode.add(new Command(CommandType.STORE, remaining.location));
+        // if remaining > 0 remaining = - remaining
+        long line = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JPOS, line+7));
+        generatedCode.add(new Command(CommandType.SUB, remaining.location));
+        generatedCode.add(new Command(CommandType.SUB, remaining.location));
+        generatedCode.add(new Command(CommandType.STORE, remaining.location));
+        generatedCode.add(new Command(CommandType.SUB, 0));
+        generatedCode.add(new Command(CommandType.INC, 0));
+        generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
         //Clean the variables
         generatedCode.add(new Command(CommandType.SUB, 0));
@@ -537,9 +554,10 @@ public class CodeGenerator extends JFTTBaseListener {
         generatedCode.add(new Command(CommandType.INC, 0));
         generatedCode.add(new Command(CommandType.STORE, multiplier.location));
 
-        //generatedCode.add(new Command(CommandType.SUB, 0));
-        //generatedCode.add(new Command(CommandType.INC, 0));
-        //generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+
+
+
+
 
         //while(mnożnik - left <= 0) mnożnik *= 2;
 
@@ -617,6 +635,15 @@ public class CodeGenerator extends JFTTBaseListener {
         generatedCode.add(new Command(CommandType.DEC,0));
         generatedCode.add(new Command(CommandType.JUMP, LoopLine));
 
+        // if negative flip the result
+        //IF b < 0 b = -b;
+        generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+        long lineResult = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JZERO, lineResult+5));
+        generatedCode.add(new Command(CommandType.LOAD, result.location));
+        generatedCode.add(new Command(CommandType.SUB, result.location));
+        generatedCode.add(new Command(CommandType.SUB, result.location));
+        generatedCode.add(new Command(CommandType.STORE, result.location));
 
         generatedCode.add(new Command(CommandType.LOAD, result.location));
 
@@ -625,6 +652,7 @@ public class CodeGenerator extends JFTTBaseListener {
         memoryManager.removeVariable(result);
         memoryManager.removeVariable(shiftCounter);
         memoryManager.removeVariable(a);
+        memoryManager.removeVariable(isNegative);
     }
 
 }

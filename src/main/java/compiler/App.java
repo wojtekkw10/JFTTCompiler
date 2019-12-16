@@ -43,11 +43,9 @@ public class App {
             //Printing the symbolTable
             System.out.println(parserManager.printSymbolTable());
 
-
-
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            codeGeneratorManager.assignIdentifierLocations(32);
+            codeGeneratorManager.assignIdentifierLocations(64);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode(true));
@@ -64,15 +62,16 @@ public class App {
         }
 
         //Mnożenie w JAVA
-        int a = 100;
-        int b = 4;
+        int a = 24;
+        int b = 3;
         int mnożnik = 1;
         int left = a;
         int wynik = 0;
+        int tmp2 = b;
         while(mnożnik < left) {
             mnożnik *= 2;
+            tmp2 *= 2;
         }
-        int tmp2 = mnożnik * b;
         while(left>=b){
             while(tmp2 > left) {
                 //stricte wieksze
