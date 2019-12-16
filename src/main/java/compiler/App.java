@@ -48,7 +48,7 @@ public class App {
             codeGeneratorManager.assignIdentifierLocations(64);
 
             codeGeneratorManager.generateCode();
-            System.out.println(codeGeneratorManager.printGeneratedCode(true));
+            //System.out.println(codeGeneratorManager.printGeneratedCode(true));
             System.out.println(codeGeneratorManager.memoryManager.printMemory());
 
 

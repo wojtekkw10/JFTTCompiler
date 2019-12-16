@@ -72,8 +72,9 @@ public class CodeGeneratorManager {
     }
 
     public void generateCode(){
-        CodeGenerator codeGenerator = new CodeGenerator(symbolTable, memoryManager, generatedCode);
         ParseTreeWalker walker = new ParseTreeWalker();
+        CodeGenerator codeGenerator = new CodeGenerator(symbolTable, memoryManager, generatedCode, parser, walker);
+
 
         //run the parser
         walker.walk(codeGenerator, parser.program());

@@ -3,6 +3,7 @@ grammar JFTT;
     package parser;
 }
 
+
 BLANK:         [ \t\r\n] -> skip;
 COMMENT:       '['.*?']' -> skip;
 PIDENTIFIER:   [_a-z]+;
@@ -17,7 +18,16 @@ TIMES:          'TIMES';
 DIV:            'DIV';
 MOD:            'MOD';
 FOR:            'FOR';
-
+EQ:             'EQ';
+NEQ:            'NEQ';
+LE:             'LE';
+GE:             'GE';
+LEQ:            'LEQ';
+GEQ:            'GEQ';
+IF:             'IF';
+THEN:           'THEN';
+ELSE:           'ELSE';
+ENDIF:          'ENDIF';
 
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
@@ -35,8 +45,8 @@ commands      : commands command
               ;
 
 command       : identifier ASSIGN expression';'
-              | 'IF' condition 'THEN' commands 'ELSE' commands 'ENDIF'
-              | 'IF' condition 'THEN' commands 'ENDIF'
+              | IF condition THEN commands ELSE commands ENDIF
+              | IF condition THEN commands ENDIF
               | 'WHILE' condition 'DO' commands 'ENDWHILE'
               | 'DO' commands 'WHILE' condition 'ENDDO'
               | FOR PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR'
@@ -53,12 +63,12 @@ expression    : value
               | value MOD value
               ;
 
-condition     : value 'EQ' value
-              | value 'NEQ' value
-              | value 'LE' value
-              | value 'GE' value
-              | value 'LEQ' value
-              | value 'GEQ' value;
+condition     : value EQ value
+              | value NEQ value
+              | value LE value
+              | value GE value
+              | value LEQ value
+              | value GEQ value;
 
 value         : NUM
               | identifier

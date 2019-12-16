@@ -2,6 +2,7 @@ package compiler.CodeGeneration;
 
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTBaseListener;
 import parser.JFTTParser;
 
@@ -14,11 +15,15 @@ public class CodeGenerator extends JFTTBaseListener {
     public ArrayList<Command> generatedCode;
     HashMap<String, Symbol> symbolTable;
     MemoryManager memoryManager;
+    JFTTParser parser;
+    ParseTreeWalker walker;
 
-    public CodeGenerator(HashMap<String, Symbol> symbolTable, MemoryManager memoryManager, ArrayList<Command> generatedCode){
+    public CodeGenerator(HashMap<String, Symbol> symbolTable, MemoryManager memoryManager, ArrayList<Command> generatedCode, JFTTParser parser, ParseTreeWalker walker){
         this.symbolTable = symbolTable;
         this.memoryManager = memoryManager;
         this.generatedCode = generatedCode;
+        this.parser = parser;
+        this.walker = walker;
 
     }
 
@@ -28,7 +33,7 @@ public class CodeGenerator extends JFTTBaseListener {
 
     @Override
     public void enterCommand(JFTTParser.CommandContext ctx) {
-
+        System.out.println("Entered Commands");
 
         if(ctx.READ()!=null){
             //READ identifier;
@@ -38,6 +43,7 @@ public class CodeGenerator extends JFTTBaseListener {
 
         }
         if(ctx.WRITE()!=null){
+            System.out.println(ctx.getText());
             //WRITE value;
             generatedCode.addAll(generateLoadCodeForValue(ctx.value(0)));
             generatedCode.add(new Command(CommandType.PUT, 0));
@@ -130,19 +136,54 @@ public class CodeGenerator extends JFTTBaseListener {
                 //            left = left - tmp2;
                 //        }
                 //expression -> value DIV value
+                // if a < 0 isNegative - 1
+                // if b < 0 isNegative + 1
                 Symbol multiplier = memoryManager.getFreeSpace();
                 Symbol remaining = memoryManager.getFreeSpace();
                 Symbol result = memoryManager.getFreeSpace();
                 Symbol shiftCounter = memoryManager.getFreeSpace();
                 Symbol b = memoryManager.getFreeSpace();
+                Symbol isNegative = memoryManager.getFreeSpace();
+
+                //isNegative is by default false aka = 1
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
 
                 //Copy variables to tmp memory
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
                 generatedCode.add(new Command(CommandType.STORE, remaining.location));
 
+                //IF remaining < 0 flip it
+                long line0 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JPOS, line0+8));
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.DEC, 0));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
                 //Copy variables to tmp memory
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
                 generatedCode.add(new Command(CommandType.STORE, b.location));
+
+                //IF b < 0 flip it
+                long line1 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.JPOS, line1+9));
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.STORE, b.location));
+                generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+                generatedCode.add(new Command(CommandType.INC, 0));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
+
 
                 //Cleaning tmp variables
                 generatedCode.add(new Command(CommandType.SUB, 0));
@@ -230,6 +271,17 @@ public class CodeGenerator extends JFTTBaseListener {
                 generatedCode.add(new Command(CommandType.SUB, b.location));
                 generatedCode.add(new Command(CommandType.JUMP, loopLine));
 
+                // if isNegative flip the result
+                generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+                //generatedCode.add(new Command(CommandType.PUT, isNegative.location));
+                long line2 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JZERO, line2 + 5));
+                generatedCode.add(new Command(CommandType.LOAD, result.location));
+                generatedCode.add(new Command(CommandType.SUB, result.location));
+                generatedCode.add(new Command(CommandType.SUB, result.location));
+                generatedCode.add(new Command(CommandType.STORE, result.location));
+
+
 
                 generatedCode.add(new Command(CommandType.LOAD, result.location));
                 generatedCode.addAll(generateStoreCodeForIdentifier(id));
@@ -240,6 +292,7 @@ public class CodeGenerator extends JFTTBaseListener {
                 memoryManager.removeVariable(result);
                 memoryManager.removeVariable(shiftCounter);
                 memoryManager.removeVariable(b);
+                memoryManager.removeVariable(isNegative);
 
             }
             else if(expr.MOD()!=null){
@@ -377,7 +430,41 @@ public class CodeGenerator extends JFTTBaseListener {
 
 
         }
+        else if(ctx.IF()!=null){
+            //IF condition THEN commands ENDIF
+            if(ctx.ELSE()==null){
+                if(ctx.condition().EQ()!=null){
+                    System.out.println("Robienie IFa");
+                    System.out.println(generatedCode.size());
+                    //System.out.println(ctx.commands(0).getText());
+                    //run the parser
+                    //ParseTreeWalker walker = new ParseTreeWalker();
+                    walker.walk(this, ctx.commands(0));
+                    //ctx.commands(0);
+
+                    System.out.println(generatedCode.size());
+
+
+
+
+                }
+            }
+        }
+
     }
+
+    ArrayList<Command> generateEQCode(Symbol a, Symbol b, JFTTParser.ConditionContext ctx, long endingLine){
+        ArrayList<Command> commands = new ArrayList<>();
+        if(ctx.EQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, endingLine));
+            commands.add(new Command(CommandType.JNEG, endingLine-1));
+        }
+
+        return commands;
+    }
+
 
     //STORES what's in the accumulator to id
     ArrayList<Command> generateStoreCodeForIdentifier(JFTTParser.IdentifierContext id){
