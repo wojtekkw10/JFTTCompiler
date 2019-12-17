@@ -3,14 +3,11 @@ package compiler.CodeGeneration;
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import parser.JFTTBaseListener;
 import parser.JFTTBaseVisitor;
 import parser.JFTTParser;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class CodeGenerator extends JFTTBaseVisitor<Integer> {
     public ArrayList<Command> generatedCode;
@@ -434,35 +431,220 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         else if(ctx.IF()!=null){
             //IF condition THEN commands ENDIF
             if(ctx.ELSE()==null){
+
+                int line = generatedCode.size();
+                System.out.println(generatedCode.size());
+
+                int conditionLineStart = generatedCode.size();
+                generatedCode.addAll(line, generateConditionCode(ctx.condition().value(0), ctx.condition().value(1), ctx.condition()));
+                int conditionLineEnd = generatedCode.size();
+                int shift = conditionLineEnd-conditionLineStart;
+                //shift = 0;
+
+                visitCommands(ctx.commands(0));
+
+                long lineAfter = generatedCode.size();
+                System.out.println(generatedCode.size());
+
                 if(ctx.condition().EQ()!=null){
-                    System.out.println("Robienie IFa");
-                    System.out.println(generatedCode.size());
-                    //System.out.println(ctx.commands(0).getText());
-                    //run the parser
-                    //ParseTreeWalker walker = new ParseTreeWalker();
-                    //walker.walk(this, ctx.commands(0));
-                    //ctx.commands(0);
-                    visitCommands(ctx.commands(0));
-
-                    System.out.println(generatedCode.size());
-                    return 0; //visit(ctx.getParent().getParent().getChild(1));
-
-
-
+                    generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                    generatedCode.get(conditionLineEnd-2).argument = lineAfter;
                 }
+                else if(ctx.condition().NEQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                }
+                else if(ctx.condition().LE()!=null || ctx.condition().GE()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                    generatedCode.get(conditionLineEnd-2).argument = lineAfter;
+                }
+                else if(ctx.condition().LEQ()!=null || ctx.condition().GEQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                }
+                return 0;
             }
+            else if(ctx.ELSE()!=null){
+                System.out.println("Z ESLEM");
+
+                int line = generatedCode.size();
+                System.out.println(generatedCode.size());
+
+                int conditionLineStart = generatedCode.size();
+                generatedCode.addAll(line, generateConditionCode(ctx.condition().value(0), ctx.condition().value(1), ctx.condition()));
+                int conditionLineEnd = generatedCode.size();
+
+
+                visitCommands(ctx.commands(0));
+
+                int secondConditionLineStart = generatedCode.size();
+                generatedCode.addAll(generateOppositeConditionCode(ctx.condition().value(0),ctx.condition().value(1), ctx.condition()));
+                int secondConditionLineEnd = generatedCode.size();
+
+                System.out.println(generatedCode.size());
+                visitCommands(ctx.commands(1));
+                System.out.println(generatedCode.size());
+
+
+                long lineAfter = generatedCode.size();
+                System.out.println(generatedCode.size());
+
+                if(ctx.condition().EQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+                    generatedCode.get(conditionLineEnd-2).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                } else if(ctx.condition().NEQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                    generatedCode.get(secondConditionLineEnd-2).argument = lineAfter;
+                } else if(ctx.condition().LE()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+                    generatedCode.get(conditionLineEnd-2).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                }  else if(ctx.condition().GE()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+                    generatedCode.get(conditionLineEnd-2).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                }  else if(ctx.condition().LEQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                    generatedCode.get(secondConditionLineEnd-2).argument = lineAfter;
+                } else if(ctx.condition().GEQ()!=null){
+                    generatedCode.get(conditionLineEnd-1).argument = secondConditionLineStart;
+
+                    generatedCode.get(secondConditionLineEnd-1).argument = lineAfter;
+                    generatedCode.get(secondConditionLineEnd-2).argument = lineAfter;
+                }
+
+
+
+            }
+        }
+        else if(ctx.ENDWHILE()!=null){
+
+
+            int line = generatedCode.size();
+            System.out.println(generatedCode.size());
+
+            int conditionLineStart = generatedCode.size();
+            generatedCode.addAll(line, generateConditionCode(ctx.condition().value(0),ctx.condition().value(1), ctx.condition()));
+            int conditionLineEnd = generatedCode.size();
+
+            visitCommands(ctx.commands(0));
+
+            generatedCode.add(new Command(CommandType.JUMP, conditionLineStart));
+
+            long lineAfter = generatedCode.size();
+            System.out.println(generatedCode.size());
+
+            if(ctx.condition().EQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                generatedCode.get(conditionLineEnd-2).argument = lineAfter;
+            }
+            else if(ctx.condition().NEQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+            }
+            else if(ctx.condition().LE()!=null || ctx.condition().GE()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                generatedCode.get(conditionLineEnd-2).argument = lineAfter;
+            }
+            else if(ctx.condition().LEQ()!=null || ctx.condition().GEQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+            }
+
+
+
+
         }
         return 0;
 
     }
 
-    ArrayList<Command> generateEQCode(Symbol a, Symbol b, JFTTParser.ConditionContext ctx, long endingLine){
+    ArrayList<Command> generateConditionCode(JFTTParser.ValueContext a1, JFTTParser.ValueContext b1, JFTTParser.ConditionContext ctx){
         ArrayList<Command> commands = new ArrayList<>();
+        Symbol a = memoryManager.getFreeSpace();
+        Symbol b = memoryManager.getFreeSpace();
+
+        commands.addAll(generateLoadCodeForValue(a1));
+        commands.add(new Command(CommandType.STORE, a.location));
+        commands.addAll(generateLoadCodeForValue(b1));
+        commands.add(new Command(CommandType.STORE, b.location));
+
+        System.out.println("ROZMIAR: "+commands.size());
+
         if(ctx.EQ()!=null){
             commands.add(new Command(CommandType.LOAD, a.location));
             commands.add(new Command(CommandType.SUB, b.location));
-            commands.add(new Command(CommandType.JPOS, endingLine));
-            commands.add(new Command(CommandType.JNEG, endingLine-1));
+            commands.add(new Command(CommandType.JPOS, 0));
+            commands.add(new Command(CommandType.JNEG, 0));
+        }
+        else if(ctx.NEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.LE()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, 0));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.GE()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JNEG, 0));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.LEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, 0));
+        } else if(ctx.GEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JNEG, 0));
+        }
+
+        return commands;
+    }
+
+    ArrayList<Command> generateOppositeConditionCode(JFTTParser.ValueContext a1, JFTTParser.ValueContext b1, JFTTParser.ConditionContext ctx){
+        ArrayList<Command> commands = new ArrayList<>();
+        Symbol a = memoryManager.getFreeSpace();
+        Symbol b = memoryManager.getFreeSpace();
+
+        generatedCode.addAll(generateLoadCodeForValue(a1));
+        generatedCode.add(new Command(CommandType.STORE, a.location));
+        generatedCode.addAll(generateLoadCodeForValue(b1));
+        generatedCode.add(new Command(CommandType.STORE, b.location));
+        if(ctx.NEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, 0));
+            commands.add(new Command(CommandType.JNEG, 0));
+        }
+        else if(ctx.EQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.GEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, 0));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.LEQ()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JNEG, 0));
+            commands.add(new Command(CommandType.JZERO, 0));
+        } else if(ctx.GE()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JPOS, 0));
+        } else if(ctx.LE()!=null){
+            commands.add(new Command(CommandType.LOAD, a.location));
+            commands.add(new Command(CommandType.SUB, b.location));
+            commands.add(new Command(CommandType.JNEG, 0));
         }
 
         return commands;
@@ -528,7 +710,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
         if(value.NUM()!=null){
             long number = Long.parseLong(value.NUM().getText());
-            generatedCode.addAll(generateNumber(number));
+            commands.addAll(generateNumber(number));
         }
         else if(id.NUM()!=null){
             //a(5);

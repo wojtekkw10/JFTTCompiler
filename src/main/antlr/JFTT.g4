@@ -28,6 +28,9 @@ IF:             'IF';
 THEN:           'THEN';
 ELSE:           'ELSE';
 ENDIF:          'ENDIF';
+WHILE:          'WHILE';
+DO:             'DO';
+ENDWHILE:       'ENDWHILE';
 
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
@@ -47,7 +50,7 @@ commands      : commands command
 command       : identifier ASSIGN expression';'
               | IF condition THEN commands ELSE commands ENDIF
               | IF condition THEN commands ENDIF
-              | 'WHILE' condition 'DO' commands 'ENDWHILE'
+              | WHILE condition DO commands ENDWHILE
               | 'DO' commands 'WHILE' condition 'ENDDO'
               | FOR PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR'
               | FOR PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR'
