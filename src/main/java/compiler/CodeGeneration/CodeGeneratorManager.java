@@ -2,6 +2,7 @@ package compiler.CodeGeneration;
 
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTParser;
 
@@ -75,9 +76,10 @@ public class CodeGeneratorManager {
         ParseTreeWalker walker = new ParseTreeWalker();
         CodeGenerator codeGenerator = new CodeGenerator(symbolTable, memoryManager, generatedCode, parser, walker);
 
-
+        ParseTree tree = parser.program();
+        Integer answer = new CodeGenerator(symbolTable, memoryManager, generatedCode, parser, walker).visit(tree);
         //run the parser
-        walker.walk(codeGenerator, parser.program());
+        //walker.walk(codeGenerator, parser.program());
 
         //getting feedback from parsers
         generatedCode = codeGenerator.getGeneratedCode();

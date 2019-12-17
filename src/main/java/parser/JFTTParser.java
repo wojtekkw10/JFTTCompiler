@@ -123,6 +123,11 @@ public class JFTTParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitProgram(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitProgram(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -193,6 +198,11 @@ public class JFTTParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitDeclarations(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitDeclarations(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -322,6 +332,11 @@ public class JFTTParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitCommands(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitCommands(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CommandsContext commands() throws RecognitionException {
@@ -421,6 +436,11 @@ public class JFTTParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitCommand(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitCommand(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -613,6 +633,11 @@ public class JFTTParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitExpression(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitExpression(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -722,6 +747,11 @@ public class JFTTParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitCondition(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitCondition(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ConditionContext condition() throws RecognitionException {
@@ -827,6 +857,11 @@ public class JFTTParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitValue(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitValue(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ValueContext value() throws RecognitionException {
@@ -882,6 +917,11 @@ public class JFTTParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof JFTTListener ) ((JFTTListener)listener).exitIdentifier(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JFTTVisitor ) return ((JFTTVisitor<? extends T>)visitor).visitIdentifier(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 

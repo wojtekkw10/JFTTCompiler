@@ -4,6 +4,7 @@ import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.JFTTBaseListener;
+import parser.JFTTBaseVisitor;
 import parser.JFTTParser;
 
 import java.lang.reflect.Array;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class CodeGenerator extends JFTTBaseListener {
+public class CodeGenerator extends JFTTBaseVisitor<Integer> {
     public ArrayList<Command> generatedCode;
     HashMap<String, Symbol> symbolTable;
     MemoryManager memoryManager;
@@ -31,9 +32,10 @@ public class CodeGenerator extends JFTTBaseListener {
         return generatedCode;
     }
 
+
     @Override
-    public void enterCommand(JFTTParser.CommandContext ctx) {
-        System.out.println("Entered Commands");
+    public Integer visitCommand(JFTTParser.CommandContext ctx) {
+        System.out.println("Entered Commands"+ctx.getText());
 
         if(ctx.READ()!=null){
             //READ identifier;
@@ -43,7 +45,6 @@ public class CodeGenerator extends JFTTBaseListener {
 
         }
         if(ctx.WRITE()!=null){
-            System.out.println(ctx.getText());
             //WRITE value;
             generatedCode.addAll(generateLoadCodeForValue(ctx.value(0)));
             generatedCode.add(new Command(CommandType.PUT, 0));
@@ -439,17 +440,19 @@ public class CodeGenerator extends JFTTBaseListener {
                     //System.out.println(ctx.commands(0).getText());
                     //run the parser
                     //ParseTreeWalker walker = new ParseTreeWalker();
-                    walker.walk(this, ctx.commands(0));
+                    //walker.walk(this, ctx.commands(0));
                     //ctx.commands(0);
+                    visitCommands(ctx.commands(0));
 
                     System.out.println(generatedCode.size());
-
+                    return 0; //visit(ctx.getParent().getParent().getChild(1));
 
 
 
                 }
             }
         }
+        return 0;
 
     }
 

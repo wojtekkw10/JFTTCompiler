@@ -35,4 +35,6 @@ BEGIN
 
     WRITE 7;
     WRITE 8;
+    WRITE 9;
+    WRITE 10;
 END
