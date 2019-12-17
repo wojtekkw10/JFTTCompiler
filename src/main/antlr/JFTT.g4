@@ -32,6 +32,10 @@ WHILE:          'WHILE';
 DO:             'DO';
 ENDWHILE:       'ENDWHILE';
 ENDDO:          'ENDDO';
+FROM:           'FROM';
+TO:             'TO';
+DOWNTO:         'DOWNTO';
+ENDFOR:         'ENDFOR';
 
 
 program       : 'DECLARE' declarations 'BEGIN' commands 'END'
@@ -53,8 +57,8 @@ command       : identifier ASSIGN expression';'
               | IF condition THEN commands ENDIF
               | WHILE condition DO commands ENDWHILE
               | DO commands WHILE condition ENDDO
-              | FOR PIDENTIFIER 'FROM' value 'TO' value 'DO' commands 'ENDFOR'
-              | FOR PIDENTIFIER 'FROM' value 'DOWNTO' value 'DO' commands 'ENDFOR'
+              | FOR PIDENTIFIER FROM value TO value DO commands ENDFOR
+              | FOR PIDENTIFIER FROM value DOWNTO value DO commands ENDFOR
               | READ identifier';'
               | WRITE value';'
               ;

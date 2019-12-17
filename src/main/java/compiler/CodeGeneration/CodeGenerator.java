@@ -1,5 +1,6 @@
 package compiler.CodeGeneration;
 
+import compiler.GrammarParser.IdentifierType;
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -584,6 +585,81 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             else if(ctx.condition().LEQ()!=null || ctx.condition().GEQ()!=null){
                 generatedCode.get(conditionLineEnd-1).argument = lineAfter;
             }
+        }
+        else if(ctx.TO()!=null){
+            //FOR PIDENTIFIER FROM value TO value DO commands ENDFOR
+            Symbol iterator = memoryManager.getFreeSpace();
+            Symbol a = memoryManager.getFreeSpace();
+            Symbol b = memoryManager.getFreeSpace();
+
+            generatedCode.addAll(generateLoadCodeForValue(ctx.value(0)));
+            generatedCode.add(new Command(CommandType.STORE, a.location));
+            generatedCode.add(new Command(CommandType.STORE, iterator.location));
+            generatedCode.addAll(generateLoadCodeForValue(ctx.value(1)));
+            generatedCode.add(new Command(CommandType.STORE, b.location));
+
+            //loading the iterator to the symbol Table
+            String iterator_name = ctx.PIDENTIFIER().getText();
+            Symbol s = new Symbol(IdentifierType.VARIABLE, iterator_name);
+            s.location = iterator.location;
+
+            symbolTable.put(iterator_name, s);
+            int conditionStartLine = generatedCode.size();
+            generatedCode.add(new Command(CommandType.LOAD, iterator.location));
+            generatedCode.add(new Command(CommandType.SUB, b.location));
+            generatedCode.add(new Command(CommandType.JPOS, 0));
+            int conditionEndLine = generatedCode.size();
+
+            visitCommands(ctx.commands(0));
+
+            generatedCode.add(new Command(CommandType.LOAD, iterator.location));
+            generatedCode.add(new Command(CommandType.INC, 0));
+            generatedCode.add(new Command(CommandType.STORE, iterator.location));
+            generatedCode.add(new Command(CommandType.JUMP, conditionStartLine));
+
+            int instructionEndLine = generatedCode.size();
+
+            generatedCode.get(conditionEndLine - 1).argument = instructionEndLine;
+
+            symbolTable.remove(iterator_name);
+
+        }
+        else if(ctx.DOWNTO()!=null){
+            //FOR PIDENTIFIER FROM value DOWNTO value DO commands ENDFOR
+            Symbol iterator = memoryManager.getFreeSpace();
+            Symbol a = memoryManager.getFreeSpace();
+            Symbol b = memoryManager.getFreeSpace();
+
+            generatedCode.addAll(generateLoadCodeForValue(ctx.value(0)));
+            generatedCode.add(new Command(CommandType.STORE, a.location));
+            generatedCode.add(new Command(CommandType.STORE, iterator.location));
+            generatedCode.addAll(generateLoadCodeForValue(ctx.value(1)));
+            generatedCode.add(new Command(CommandType.STORE, b.location));
+
+            //loading the iterator to the symbol Table
+            String iterator_name = ctx.PIDENTIFIER().getText();
+            Symbol s = new Symbol(IdentifierType.VARIABLE, iterator_name);
+            s.location = iterator.location;
+
+            symbolTable.put(iterator_name, s);
+            int conditionStartLine = generatedCode.size();
+            generatedCode.add(new Command(CommandType.LOAD, iterator.location));
+            generatedCode.add(new Command(CommandType.SUB, b.location));
+            generatedCode.add(new Command(CommandType.JNEG, 0));
+            int conditionEndLine = generatedCode.size();
+
+            visitCommands(ctx.commands(0));
+
+            generatedCode.add(new Command(CommandType.LOAD, iterator.location));
+            generatedCode.add(new Command(CommandType.DEC, 0));
+            generatedCode.add(new Command(CommandType.STORE, iterator.location));
+            generatedCode.add(new Command(CommandType.JUMP, conditionStartLine));
+
+            int instructionEndLine = generatedCode.size();
+
+            generatedCode.get(conditionEndLine - 1).argument = instructionEndLine;
+
+            symbolTable.remove(iterator_name);
         }
         return 0;
 

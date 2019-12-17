@@ -10,19 +10,20 @@ DONE:
 - add declarations code generator
 - add READ code generation
 - add WRITE code generation
-
-DOING:
 - add ASSIGN code generation
 - add EXPRESSION code generation
-
-TODO:
-- number out of LONG scope
-- unit tests
 - add multiplication and division for negative numbers
-- add generating number out of scope
-- array index out of range Error
 - add IF code generation
 - add CONDITION code generation
 - add WHILE code generation
 - add DO WHILE code generation
 - add FOR code generation
+
+
+DOING:
+- add negative MOD result
+
+TODO:
+- number out of LONG scope
+- unit tests
+- array index out of range Error
