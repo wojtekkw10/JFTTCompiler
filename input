@@ -1,83 +1,28 @@
-[DECLARE
-    a, b,c
-BEGIN
-    READ c;
-    b ASSIGN 1;
-    a ASSIGN 1;
-    WHILE b LE c DO
-    b ASSIGN b PLUS 1;
-    a ASSIGN a TIMES b;
-    ENDWHILE
-    WRITE a;
-END
-]
+[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-    n,  e(-100:-95), d, c(2:6), f(100: 102), h, a, b, k
+    n, m, reszta, potega, dzielnik
 BEGIN
-    [READ n;
-    READ c(n);
-    READ c(5);
-    WRITE c(5);
-    WRITE c(n);
-    WRITE n;
-    WRITE 56;
-
-    h ASSIGN 5 PLUS 5;
-    WRITE h;
-
-    n ASSIGN 10;
-    f(101) ASSIGN 43;
-    h ASSIGN n PLUS f(101);
-    WRITE h;
-
-    c(5) ASSIGN 23;
-    e(-96) ASSIGN 10;
-    f(100) ASSIGN e(-96) PLUS c(5);
-    WRITE f(100);
-
-    a ASSIGN 15;
-    b ASSIGN 2;
-    k ASSIGN a MINUS b;
-    WRITE k;]
-
-    [k ASSIGN 32 TIMES 32;
-    IF 210 LEQ 210 THEN
-    IF 21 LEQ 202 THEN
-    IF 21 LEQ 202 THEN
-    IF 23 LEQ 222 THEN
-    IF 21 LEQ 202 THEN
-    IF 20 LEQ 202 THEN
-    WRITE 5;
-    WRITE 5;
-    WRITE 5;
-    WRITE 5;
+    READ n;
+    dzielnik ASSIGN 2;
+    m ASSIGN dzielnik TIMES dzielnik;
+    WHILE n GEQ m DO
+        potega ASSIGN 0;
+        reszta ASSIGN n MOD dzielnik;
+        WHILE reszta EQ 0 DO
+            n ASSIGN n DIV dzielnik;
+            potega ASSIGN potega PLUS 1;
+            reszta ASSIGN n MOD dzielnik;
+        ENDWHILE
+        IF potega GE 0 THEN [ czy znaleziono dzielnik ]
+            WRITE dzielnik;
+            WRITE potega;
+        ELSE
+            dzielnik ASSIGN dzielnik PLUS 1;
+            m ASSIGN dzielnik TIMES dzielnik;
+        ENDIF
+    ENDWHILE
+    IF n NEQ 1 THEN [ ostatni dzielnik ]
+        WRITE n;
+        WRITE 1;
     ENDIF
-    ENDIF
-    ENDIF
-    ENDIF
-    ENDIF
-    ENDIF]
-
-    [c(2) ASSIGN 5;
-    IF c(2) LEQ 10 THEN
-    WRITE 5;
-    ELSE
-    WRITE 10;
-    ENDIF
-    WRITE 6;]
-
-    [k ASSIGN 2;
-    c(2) ASSIGN 0;
-    DO
-        c(2) ASSIGN c(2) PLUS 1;
-        WRITE c(2);
-    WHILE c(2) LE 15
-    ENDDO]
-
-    k ASSIGN 10;
-
-    FOR i FROM 20 DOWNTO k DO
-    WRITE i;
-    ENDFOR
-    WRITE 5;
 END

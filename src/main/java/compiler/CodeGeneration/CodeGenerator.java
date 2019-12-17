@@ -144,7 +144,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 Symbol b = memoryManager.getFreeSpace();
                 Symbol isNegative = memoryManager.getFreeSpace();
 
-                //isNegative is by default false aka = 1
+                //isNegative is by default false aka = 0
                 generatedCode.add(new Command(CommandType.SUB, 0));
                 generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
@@ -321,6 +321,11 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 Symbol result = memoryManager.getFreeSpace();
                 Symbol shiftCounter = memoryManager.getFreeSpace();
                 Symbol b = memoryManager.getFreeSpace();
+                Symbol isNegative = memoryManager.getFreeSpace();
+
+                //isNegative is by default false aka = 0
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
                 //Copy variables to tmp memory
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
@@ -329,6 +334,32 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 //Copy variables to tmp memory
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
                 generatedCode.add(new Command(CommandType.STORE, b.location));
+
+                //IF b < 0 flip it
+                long line1 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.JPOS, line1+9));
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.STORE, b.location));
+                generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+                generatedCode.add(new Command(CommandType.INC, 0));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
+
+
+                //IF remaining < 0 flip it
+
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                long line0 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JPOS, line0+5));
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+
 
                 //Cleaning tmp variables
                 generatedCode.add(new Command(CommandType.SUB, 0));
@@ -411,6 +442,14 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.SUB, b.location));
                 generatedCode.add(new Command(CommandType.JUMP, loopLine));
 
+                // if isNegative flip the result
+                generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+                long line2 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JZERO, line2 + 5));
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.SUB, remaining.location));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
 
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
                 generatedCode.addAll(generateStoreCodeForIdentifier(id));
