@@ -332,6 +332,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 //Cleaning tmp variables
                 generatedCode.add(new Command(CommandType.SUB, 0));
                 generatedCode.add(new Command(CommandType.STORE, result.location));
+                generatedCode.add(new Command(CommandType.STORE, shiftCounter.location));
 
                 generatedCode.add(new Command(CommandType.INC, 0));
                 generatedCode.add(new Command(CommandType.STORE, multiplier.location));
@@ -524,8 +525,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             }
         }
         else if(ctx.ENDWHILE()!=null){
-
-
             int line = generatedCode.size();
             System.out.println(generatedCode.size());
 
@@ -554,10 +553,37 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             else if(ctx.condition().LEQ()!=null || ctx.condition().GEQ()!=null){
                 generatedCode.get(conditionLineEnd-1).argument = lineAfter;
             }
+        }
+        else if(ctx.ENDDO()!=null){
+            int line = generatedCode.size();
+            System.out.println(generatedCode.size());
 
+            visitCommands(ctx.commands(0));
 
+            int conditionLineStart = generatedCode.size();
+            generatedCode.addAll(generateConditionCode(ctx.condition().value(0),ctx.condition().value(1), ctx.condition()));
+            int conditionLineEnd = generatedCode.size();
 
+            int jumpLine = generatedCode.size();
+            generatedCode.add(new Command(CommandType.JUMP, line));
 
+            long lineAfter = generatedCode.size();
+            System.out.println(generatedCode.size());
+
+            if(ctx.condition().EQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                generatedCode.get(conditionLineEnd-2).argument = lineAfter;
+            }
+            else if(ctx.condition().NEQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+            }
+            else if(ctx.condition().LE()!=null || ctx.condition().GE()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+                generatedCode.get(conditionLineEnd-2).argument = lineAfter;
+            }
+            else if(ctx.condition().LEQ()!=null || ctx.condition().GEQ()!=null){
+                generatedCode.get(conditionLineEnd-1).argument = lineAfter;
+            }
         }
         return 0;
 
@@ -689,8 +715,8 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             commands.add(new Command(CommandType.LOAD, tmp2.location));
             commands.add(new Command(CommandType.STOREI, memoryLocation));
 
-            memoryManager.removeVariable(tmp);
-            memoryManager.removeVariable(tmp2);
+            //memoryManager.removeVariable(tmp);
+            //memoryManager.removeVariable(tmp2);
         } else{
             //n;
             String name = id.PIDENTIFIER(0).getText();
@@ -741,7 +767,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             commands.add(new Command(CommandType.STORE, memoryLocation));
             commands.add(new Command(CommandType.LOADI, memoryLocation));
 
-            memoryManager.removeVariable(tmp);
+            //memoryManager.removeVariable(tmp);
         } else{
             //n;
             String name = id.PIDENTIFIER(0).getText();
@@ -822,6 +848,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         generatedCode.add(new Command(CommandType.SUB, 0));
         generatedCode.add(new Command(CommandType.STORE, result.location));
         generatedCode.add(new Command(CommandType.STORE, shiftCounter.location));
+        generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
         generatedCode.add(new Command(CommandType.INC, 0));
         generatedCode.add(new Command(CommandType.STORE, multiplier.location));
@@ -895,7 +922,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         generatedCode.add(new Command(CommandType.LOAD, result.location));
         generatedCode.add(new Command(CommandType.ADD, tmp.location));
         generatedCode.add(new Command(CommandType.STORE, result.location));
-        memoryManager.removeVariable(tmp);
+        //memoryManager.removeVariable(tmp);
 
         //left -= multiplier;
         generatedCode.add(new Command(CommandType.LOAD, remaining.location));
