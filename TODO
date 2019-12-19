@@ -20,6 +20,7 @@ DONE:
 - add FOR code generation
 - add negative MOD result
 - division by 0
+- array index out of range Error
 
 DOING:
 
@@ -27,4 +28,4 @@ DOING:
 TODO:
 - number out of LONG scope
 - unit tests
-- array index out of range Error
+

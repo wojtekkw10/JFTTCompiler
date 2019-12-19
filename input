@@ -2,5 +2,6 @@
 DECLARE
     n, m, reszta, potega, dzielnik(1:2)
 BEGIN
-    WRITE dzielnik(3);
+    WRITE 100000000000000000000;
+    n ASSIGN 100000000000000000000000000;
 END

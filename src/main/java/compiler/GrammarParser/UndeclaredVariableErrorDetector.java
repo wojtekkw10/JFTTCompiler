@@ -73,7 +73,14 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     @Override
     public void enterValue(JFTTParser.ValueContext ctx) {
         if(ctx.NUM()!=null){
-            long number = Long.parseLong(ctx.NUM().getText());
+            long number = 0;
+            try{
+                number = Long.parseLong(ctx.NUM().getText());
+            } catch(NumberFormatException e){
+                int line = ctx.getStart().getLine();
+                errors.add(new Error(line, "Number out of long long scope"));
+            }
+
             if(number > largestNumber) largestNumber = number;
         }
     }

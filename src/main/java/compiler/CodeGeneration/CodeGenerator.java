@@ -895,7 +895,12 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         JFTTParser.IdentifierContext id = value.identifier();
 
         if(value.NUM()!=null){
-            long number = Long.parseLong(value.NUM().getText());
+            Long number = 0L;
+            try{
+                number = Long.parseLong(value.NUM().getText());
+            } catch(NumberFormatException e) {
+                System.out.println("Number out of long long scope");
+            }
             commands.addAll(generateNumber(number));
         }
         else if(id.NUM()!=null){
@@ -948,7 +953,13 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             isNegative = true;
         }
 
-        String stringNumber = Long.toBinaryString(number);
+        String stringNumber = "0";
+        try{
+            stringNumber = Long.toBinaryString(number);
+        } catch(NumberFormatException e) {
+            System.out.println("Number out of long long scope");
+        }
+
         int length = stringNumber.length();
         for(int i=0; i<stringNumber.length(); i++){
             int digit = Integer.parseInt(stringNumber.substring(i,i+1));
