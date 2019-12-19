@@ -108,5 +108,14 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
         }
 
 
+        if(ctx.NUM()!=null)
+        {
+            String name = ctx.PIDENTIFIER(0).getText();
+            long index = Long.parseLong(ctx.NUM().getText());
+            Symbol s = symbolTable.get(name);
+            if(s.getRangeStart() > index || s.getRangeEnd() < index) addError(new Error(line, "Array index out of scope"));
+        }
+
+
     }
 }
