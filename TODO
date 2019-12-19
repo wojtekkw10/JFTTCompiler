@@ -18,10 +18,11 @@ DONE:
 - add WHILE code generation
 - add DO WHILE code generation
 - add FOR code generation
-
+- add negative MOD result
+- division by 0
 
 DOING:
-- add negative MOD result
+
 
 TODO:
 - number out of LONG scope

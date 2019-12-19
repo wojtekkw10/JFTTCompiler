@@ -169,6 +169,11 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
                 generatedCode.add(new Command(CommandType.STORE, b.location));
 
+                // IF b == 0 return 0
+                long line3 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.JZERO, line3+65));
+
                 //IF b < 0 flip it
                 long line1 = generatedCode.size();
                 generatedCode.add(new Command(CommandType.LOAD, b.location));
@@ -280,6 +285,16 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.SUB, result.location));
                 generatedCode.add(new Command(CommandType.STORE, result.location));
 
+                //if b == 0 return 0
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                long line5 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JPOS, line5+4));
+                generatedCode.add(new Command(CommandType.JNEG, line5+4));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, result.location));
+
+
+
 
 
                 generatedCode.add(new Command(CommandType.LOAD, result.location));
@@ -327,32 +342,12 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.SUB, 0));
                 generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
+
                 //Copy variables to tmp memory
                 generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
                 generatedCode.add(new Command(CommandType.STORE, remaining.location));
 
-                //Copy variables to tmp memory
-                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
-                generatedCode.add(new Command(CommandType.STORE, b.location));
-
-                //IF b < 0 flip it
-                long line1 = generatedCode.size();
-                generatedCode.add(new Command(CommandType.LOAD, b.location));
-                generatedCode.add(new Command(CommandType.JPOS, line1+9));
-                generatedCode.add(new Command(CommandType.LOAD, b.location));
-                generatedCode.add(new Command(CommandType.SUB, b.location));
-                generatedCode.add(new Command(CommandType.SUB, b.location));
-                generatedCode.add(new Command(CommandType.STORE, b.location));
-                generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
-                generatedCode.add(new Command(CommandType.INC, 0));
-                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
-
-
-
-
                 //IF remaining < 0 flip it
-
-                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
                 long line0 = generatedCode.size();
                 generatedCode.add(new Command(CommandType.JPOS, line0+5));
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
@@ -361,13 +356,40 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.STORE, remaining.location));
 
 
+                //Copy variables to tmp memory
+                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                generatedCode.add(new Command(CommandType.STORE, b.location));
+
+                // IF b == 0 return 0
+                long line3 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.JZERO, line3+64));
+
+                //IF b < 0 flip it
+                long line1 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.JPOS, line1+8));
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.SUB, b.location));
+                generatedCode.add(new Command(CommandType.STORE, b.location));
+                generatedCode.add(new Command(CommandType.LOAD, symbolTable.get("2^0").location));
+                generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
+
+
                 //Cleaning tmp variables
                 generatedCode.add(new Command(CommandType.SUB, 0));
                 generatedCode.add(new Command(CommandType.STORE, result.location));
-                generatedCode.add(new Command(CommandType.STORE, shiftCounter.location));
 
                 generatedCode.add(new Command(CommandType.INC, 0));
                 generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+
+                Symbol tmp2 = memoryManager.getFreeSpace();
+                //tmp2 = b
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 //while(mnożnik - left <= 0) mnożnik *= 2;
                 Command c = new Command(CommandType.COMMENT, 0);
@@ -379,24 +401,25 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 long JPOSLine = generatedCode.size();
 
                 //LOOP
-                generatedCode.add(new Command(CommandType.JPOS, JPOSLine+10));
+                generatedCode.add(new Command(CommandType.JPOS, JPOSLine+13));
                 //UPDATE multiplier
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location)); //p1 = 1
                 generatedCode.add(new Command(CommandType.STORE, multiplier.location));
                 //UPDATE shiftCounter
                 generatedCode.add(new Command(CommandType.LOAD, shiftCounter.location));
-                generatedCode.add(new Command(CommandType.INC, 0)); //p1 = 1
+                generatedCode.add(new Command(CommandType.INC, 0));
                 generatedCode.add(new Command(CommandType.STORE,shiftCounter.location));
+
+                generatedCode.add(new Command(CommandType.LOAD, tmp2.location));
+                generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location));
+                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SUB, remaining.location));
                 generatedCode.add(new Command(CommandType.JUMP, JPOSLine));
                 //ENDLOOP
 
-                Symbol tmp2 = memoryManager.getFreeSpace();
-                generateMultiplicationCode(multiplier, b);
-                generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 //LOOP
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
@@ -444,12 +467,26 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
                 // if isNegative flip the result
                 generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+
+                //generatedCode.add(new Command(CommandType.PUT, isNegative.location));
                 long line2 = generatedCode.size();
                 generatedCode.add(new Command(CommandType.JZERO, line2 + 5));
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
                 generatedCode.add(new Command(CommandType.SUB, remaining.location));
                 generatedCode.add(new Command(CommandType.SUB, remaining.location));
                 generatedCode.add(new Command(CommandType.STORE, remaining.location));
+
+                //if b == 0 return 0
+                generatedCode.add(new Command(CommandType.LOAD, b.location));
+                long line5 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JPOS, line5+4));
+                generatedCode.add(new Command(CommandType.JNEG, line5+4));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+
+
+
+
 
                 generatedCode.add(new Command(CommandType.LOAD, remaining.location));
                 generatedCode.addAll(generateStoreCodeForIdentifier(id));
@@ -460,6 +497,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 memoryManager.removeVariable(result);
                 memoryManager.removeVariable(shiftCounter);
                 memoryManager.removeVariable(b);
+                memoryManager.removeVariable(isNegative);
             }
             else{
                 //expression -> value
@@ -714,7 +752,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         commands.addAll(generateLoadCodeForValue(b1));
         commands.add(new Command(CommandType.STORE, b.location));
 
-        System.out.println("ROZMIAR: "+commands.size());
+        //System.out.println("ROZMIAR: "+commands.size());
 
         if(ctx.EQ()!=null){
             commands.add(new Command(CommandType.LOAD, a.location));
@@ -745,6 +783,10 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             commands.add(new Command(CommandType.SUB, b.location));
             commands.add(new Command(CommandType.JNEG, 0));
         }
+
+        memoryManager.removeVariable(a);
+        memoryManager.removeVariable(b);
+
 
         return commands;
     }
@@ -787,6 +829,9 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             commands.add(new Command(CommandType.SUB, b.location));
             commands.add(new Command(CommandType.JNEG, 0));
         }
+
+        memoryManager.removeVariable(a);
+        memoryManager.removeVariable(b);
 
         return commands;
     }
@@ -1037,7 +1082,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         generatedCode.add(new Command(CommandType.LOAD, result.location));
         generatedCode.add(new Command(CommandType.ADD, tmp.location));
         generatedCode.add(new Command(CommandType.STORE, result.location));
-        //memoryManager.removeVariable(tmp);
+        memoryManager.removeVariable(tmp);
 
         //left -= multiplier;
         generatedCode.add(new Command(CommandType.LOAD, remaining.location));

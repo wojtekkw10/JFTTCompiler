@@ -8,6 +8,7 @@ import java.util.HashMap;
 public abstract class ErrorDetector extends JFTTBaseListener {
     HashMap<String, Symbol> symbolTable;
     ArrayList<Error> errors = new ArrayList<>();
+    long largestNumber = 0;
 
     public HashMap<String, Symbol> getSymbolTable() {
         return symbolTable;

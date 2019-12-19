@@ -10,6 +10,8 @@ public class ParserManager {
     ArrayList<ErrorDetector> errorDetectors = new ArrayList<>();
     HashMap<String, Symbol> symbolTable = new HashMap<>();
     ArrayList<Error> errors = new ArrayList<>();
+    public Boolean syntaxErrors = false;
+    public long largestNumber = 0;
 
     public void addErrorDetector(ErrorDetector errorDetector){
         errorDetectors.add(errorDetector);
@@ -26,11 +28,20 @@ public class ParserManager {
            //getting feedback from parsers
            symbolTable = errorDetector.getSymbolTable();
            errors.addAll(errorDetector.getErrors());
+           if(parser.getNumberOfSyntaxErrors()>0) {
+               syntaxErrors = true;
+               break;
+           }
+           if(errorDetector.largestNumber>largestNumber) largestNumber = errorDetector.largestNumber;
 
            //reset the parser to point at the beginning
            parser.reset();
        }
    }
+
+    public long getLargestNumber(){
+        return largestNumber;
+    }
 
     public HashMap<String, Symbol> getSymbolTable() {
         return symbolTable;

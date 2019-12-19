@@ -7,6 +7,8 @@ public class Symbol{
 
     long value;
     Boolean isArray;
+    Boolean isIterator;
+    Boolean isInitialized;
 
     long rangeStart;
     long rangeEnd;
@@ -22,6 +24,8 @@ public class Symbol{
         if(IdentifierType.ARRAY == type) isArray = true;
         else isArray = false;
         location = -1;
+        this.isIterator = false;
+        this.isInitialized = false;
     }
 
     public void setArray(long rangeStart, long rangeEnd){

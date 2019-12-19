@@ -15,7 +15,6 @@ import parser.JFTTParser;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 
 public class App {
 
@@ -34,9 +33,9 @@ public class App {
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
         parserManager.runAll(parser);
 
-        if(parserManager.getErrors().size()>0) {
+        if(parserManager.getErrors().size()>0 || parserManager.syntaxErrors) {
             //Printing errors
-            System.out.println(parserManager.printErrors());
+            if(parserManager.getErrors().size()>0) System.out.println(parserManager.printErrors());
             return;
         }
         else{
@@ -45,12 +44,15 @@ public class App {
 
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            codeGeneratorManager.assignIdentifierLocations(64);
+            long largestNumber = parserManager.getLargestNumber();
+            int largestPowerOf2 = (int) Math.ceil(Math.log(largestNumber)/Math.log(2));
+            System.out.println("POWER: "+largestPowerOf2);
+            System.out.println("POWER: "+largestNumber);
+            codeGeneratorManager.assignIdentifierLocations(largestPowerOf2);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode(true));
             System.out.println(codeGeneratorManager.memoryManager.printMemory());
-
 
             //...
 

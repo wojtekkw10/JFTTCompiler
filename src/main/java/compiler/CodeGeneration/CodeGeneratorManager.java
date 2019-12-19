@@ -20,6 +20,8 @@ public class CodeGeneratorManager {
         this.parser = parser;
     }
 
+
+
     public void assignIdentifierLocations(int maxPower){
         generatePowersOf2Array(maxPower);
 

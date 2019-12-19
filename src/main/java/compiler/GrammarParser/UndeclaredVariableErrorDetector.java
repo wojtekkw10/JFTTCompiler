@@ -1,7 +1,9 @@
 package compiler.GrammarParser;
 
+import org.antlr.v4.runtime.Token;
 import parser.JFTTParser;
 
+import static parser.JFTTLexer.FOR;
 import static parser.JFTTLexer.PIDENTIFIER;
 
 public class UndeclaredVariableErrorDetector extends ErrorDetector {
@@ -10,7 +12,69 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     public void enterCommand(JFTTParser.CommandContext ctx) {
         if(ctx.FOR()!=null){
             String name = ctx.PIDENTIFIER().getText();
-            symbolTable.put(name, new Symbol(IdentifierType.VARIABLE, name));
+            Symbol s = new Symbol(IdentifierType.VARIABLE, name);
+            s.isIterator = true;
+            s.isInitialized = true;
+            symbolTable.put(name, s);
+
+
+            String v1 = ctx.value(0).getText();
+            String v2 = ctx.value(1).getText();
+            int line = ctx.getStart().getLine();
+
+            if(symbolTable.get(v1)!= null && !symbolTable.get(v1).isInitialized && !symbolTable.get(v1).isIterator) errors.add(new Error(line, "Variable "+v1+" not initialized"));
+            if(symbolTable.get(v2)!= null && !symbolTable.get(v2).isInitialized && !symbolTable.get(v2).isIterator) errors.add(new Error(line, "Variable "+v2+" not initialized"));
+        }
+        else if(ctx.ASSIGN()!=null){
+            String name = ctx.identifier().PIDENTIFIER(0).getText();
+            String v1 = ctx.expression().value(0).getText();
+            String v2 = null;
+            if(ctx.expression().value(1)!=null) v2 = ctx.expression().value(1).getText();
+            int line = ctx.getStart().getLine();
+
+            Boolean v1Initialized = false;
+            Boolean v2Initialized = false;
+            if(symbolTable.get(v1)!= null && symbolTable.get(v1).isInitialized && !symbolTable.get(v1).isIterator) v1Initialized = true;
+            if(symbolTable.get(v2)!= null && symbolTable.get(v2).isInitialized && !symbolTable.get(v2).isIterator) v2Initialized = true;
+            if(symbolTable.get(v1)!= null && symbolTable.get(v1).isIterator) v1Initialized = true;
+            if(symbolTable.get(v2)!= null && symbolTable.get(v2).isIterator) v2Initialized = true;
+            if(ctx.expression().value(0).NUM()!=null) {
+                v1Initialized = true;
+            }
+
+
+            if(symbolTable.get(name)!= null && !symbolTable.get(name).isIterator) symbolTable.get(name).isInitialized = true;
+
+            if(symbolTable.get(name)!= null && symbolTable.get(name).isIterator) errors.add(new Error(line, "Iterator "+name+" updated"));
+
+            if(!v1Initialized) errors.add(new Error(line, "Variable "+v1+" not initialized"));
+            else symbolTable.get(name).isInitialized = true;
+            if(v2!=null && symbolTable.get(v2)!= null && !v2Initialized && !symbolTable.get(v2).isIterator) errors.add(new Error(line, "Variable "+v2+" not initialized"));
+        }
+        else if(ctx.WRITE()!=null){
+            String name = ctx.value(0).getText();
+            int line = ctx.getStart().getLine();
+            if(symbolTable.get(name)!=null && !symbolTable.get(name).isInitialized) errors.add(new Error(line, "Variable "+name+" not initialized"));
+        }
+        else if(ctx.READ()!=null){
+            String name = ctx.identifier().getText();
+            symbolTable.get(name).isInitialized = true;
+        }
+        else if(ctx.IF()!=null){
+            String v1 = ctx.condition().value(0).getText();
+            String v2 = ctx.condition().value(1).getText();
+            int line = ctx.getStart().getLine();
+
+            if(symbolTable.get(v1)!= null && !symbolTable.get(v1).isInitialized && !symbolTable.get(v1).isIterator) errors.add(new Error(line, "Variable "+v1+" not initialized"));
+            if(symbolTable.get(v2)!= null && !symbolTable.get(v2).isInitialized && !symbolTable.get(v2).isIterator) errors.add(new Error(line, "Variable "+v2+" not initialized"));
+        }
+    }
+
+    @Override
+    public void enterValue(JFTTParser.ValueContext ctx) {
+        if(ctx.NUM()!=null){
+            long number = Long.parseLong(ctx.NUM().getText());
+            if(number > largestNumber) largestNumber = number;
         }
     }
 
