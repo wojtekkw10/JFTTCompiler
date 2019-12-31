@@ -20,7 +20,5 @@ public enum CommandType {
     JZERO,
     JNEG,
 
-    HALT,
-
-    COMMENT
+    HALT
 }

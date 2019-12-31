@@ -56,5 +56,9 @@ BEGIN
         WRITE arr(b);
     ENDFOR
 
+    WRITE 555;
+    WRITE 555;
+    WRITE 556;
+
 
 END

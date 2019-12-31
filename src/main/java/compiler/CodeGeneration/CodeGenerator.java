@@ -240,16 +240,13 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                     //while(mnożnik - left <= 0) mnożnik *= 2;
-                    Command c = new Command(CommandType.COMMENT, 0);
-                    c.setComment("Multiplication");
-                    //generatedCode.add(c);
 
                     generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                     generatedCode.add(new Command(CommandType.SUB, remaining.location));
                     long JPOSLine = generatedCode.size();
 
                     //LOOP
-                    generatedCode.add(new Command(CommandType.JPOS, JPOSLine+13));
+                    generatedCode.add(new Command(CommandType.JPOS, JPOSLine+13, "while(mnożnik - left <= 0) mnożnik *= 2"));
                     //UPDATE multiplier
                     generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                     generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location)); //p1 = 1
@@ -432,9 +429,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.STORE, tmp2.location));
 
                 //while(mnożnik - left <= 0) mnożnik *= 2;
-                Command c = new Command(CommandType.COMMENT, 0);
-                c.setComment("Multiplication");
-                //generatedCode.add(c);
 
                 generatedCode.add(new Command(CommandType.LOAD, multiplier.location));
                 generatedCode.add(new Command(CommandType.SUB, remaining.location));
@@ -970,7 +964,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
     private ArrayList<Command> generateNumber(long number){
         //The number is stored in p0
         ArrayList<Command> commands = new ArrayList<>();
-        commands.add(new Command(CommandType.SUB, 0));
+        commands.add(new Command(CommandType.SUB, 0, "Generating number: "+number));
 
         Boolean isNegative = false;
         if(number<0) {
