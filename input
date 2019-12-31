@@ -1,7 +1,64 @@
-[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-    n, m, reszta, potega, dzielnik(1:2)
+    i, arr(-100:100), k, l
 BEGIN
-    WRITE 100000000000000000000;
-    n ASSIGN 100000000000000000000000000;
+    i ASSIGN -100;
+    WRITE i;
+
+    i ASSIGN 2 PLUS -10;
+    WRITE i;
+
+    i ASSIGN i MINUS -90;
+    WRITE i;
+
+    i ASSIGN 45 TIMES i;
+    WRITE i;
+
+    i ASSIGN i DIV 45;
+    WRITE i;
+
+    arr(-100) ASSIGN i;
+    WRITE arr(-100);
+
+    IF 2 EQ 2 THEN
+        WRITE 2;
+    ENDIF
+
+    i ASSIGN 3;
+    IF i NEQ 2 THEN
+        WRITE 2;
+    ELSE
+        WRITE 3;
+    ENDIF
+
+    i ASSIGN 2;
+    IF i NEQ 2 THEN
+        WRITE 2;
+    ELSE
+        WRITE 3;
+    ENDIF
+
+    i ASSIGN -10;
+    WHILE i LE 0 DO
+        IF i LE -5 THEN
+            WRITE i;
+        ENDIF
+        i ASSIGN i PLUS 1;
+    ENDWHILE
+
+    FOR b FROM -100 TO 100 DO
+        arr(b) ASSIGN 1;
+    ENDFOR
+
+    FOR b FROM 5 DOWNTO -5 DO
+        FOR v FROM 0 TO 10 DO
+            arr(b) ASSIGN arr(b) TIMES 2;
+        ENDFOR
+        WRITE arr(b);
+    ENDFOR
+
+    WRITE 555;
+    WRITE 555;
+    WRITE 556;
+
+
 END

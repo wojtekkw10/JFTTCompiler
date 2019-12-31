@@ -1,8 +1,8 @@
 package compiler.CodeGeneration;
 
 public class Command {
-    CommandType command;
-    long argument;
+    public CommandType command;
+    public long argument;
     String comment;
 
     Command(CommandType command, long argument){
@@ -10,7 +10,10 @@ public class Command {
         this.argument = argument;
     }
 
-    public void setComment(String comment) {
+    Command(CommandType command, long argument, String comment){
+        this.command = command;
+        this.argument = argument;
         this.comment = comment;
     }
+
 }

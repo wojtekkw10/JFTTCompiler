@@ -21,11 +21,13 @@ DONE:
 - add negative MOD result
 - division by 0
 - array index out of range Error
+- number out of LONG scope
 
 DOING:
 
 
 TODO:
-- number out of LONG scope
 - unit tests
-
+- multiplication and division by 2 to shifts
+- optimize array access
+- wrong parameters in FOR loop

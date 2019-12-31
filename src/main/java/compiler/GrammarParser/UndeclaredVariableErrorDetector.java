@@ -3,6 +3,9 @@ package compiler.GrammarParser;
 import org.antlr.v4.runtime.Token;
 import parser.JFTTParser;
 
+import java.awt.desktop.SystemEventListener;
+
+import static java.lang.Math.abs;
 import static parser.JFTTLexer.FOR;
 import static parser.JFTTLexer.PIDENTIFIER;
 
@@ -41,6 +44,21 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
             if(ctx.expression().value(0).NUM()!=null) {
                 v1Initialized = true;
             }
+
+            if(ctx.expression().value(0).identifier()!=null){
+                if(ctx.expression().value(0).identifier().PIDENTIFIER(1) != null){
+                    String v3 = ctx.expression().value(0).identifier().PIDENTIFIER(1).getText();
+
+                    if(symbolTable.get(v3)!= null && symbolTable.get(v3).isInitialized) {
+                        System.out.println("VARIABLE: v3: "+v3);
+                        v1Initialized = true;
+                    }
+                }
+                else if(ctx.expression().value(0).NUM() != null){
+                    v1Initialized = true;
+                }
+            }
+
 
 
             if(symbolTable.get(name)!= null && !symbolTable.get(name).isIterator) symbolTable.get(name).isInitialized = true;
@@ -81,7 +99,10 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
                 errors.add(new Error(line, "Number out of long long scope"));
             }
 
-            if(number > largestNumber) largestNumber = number;
+            if(abs(number) > largestNumber) {
+                if(number<0) largestNumber = -number;
+                else largestNumber = number;
+            }
         }
     }
 
