@@ -944,12 +944,10 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             long aLocationShift = a.location+a.getRangeLength();
 
             Symbol tmp = memoryManager.getFreeSpace();
-            long memoryLocation = tmp.location;
 
             commands.add(new Command(CommandType.LOAD, b.location));
             commands.add(new Command(CommandType.ADD, aLocationShift));
-            commands.add(new Command(CommandType.STORE, memoryLocation));
-            commands.add(new Command(CommandType.LOADI, memoryLocation));
+            commands.add(new Command(CommandType.LOADI,0));
 
             memoryManager.removeVariable(tmp);
         } else{
