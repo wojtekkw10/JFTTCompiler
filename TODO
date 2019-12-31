@@ -30,3 +30,4 @@ TODO:
 - unit tests
 - multiplication and division by 2 to shifts
 - optimize array access
+- wrong parameters in FOR loop

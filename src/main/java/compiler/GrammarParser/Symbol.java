@@ -3,7 +3,7 @@ package compiler.GrammarParser;
 public class Symbol{
     IdentifierType type;
     String name;
-    int additionalArraySpace = 3;
+    int additionalArraySpace = 1;
 
     long value;
     Boolean isArray;

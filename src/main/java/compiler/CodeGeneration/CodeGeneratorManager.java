@@ -41,26 +41,13 @@ public class CodeGeneratorManager {
         for(String key : symbolTable.keySet()){
             if(symbolTable.get(key).isArray()){
                 Symbol s = symbolTable.get(key);
-                long rangeStart = s.getRangeStart();
-                long rangeEnd = s.getRangeEnd();
-                long location = s.location;
 
                 s.locationShift = -s.getRangeStart()+s.location;
 
                 long rangeStartLocation = s.location+s.getRangeLength();
-                long rangeEndLocation = s.location+s.getRangeLength()+1;
-                long locationLocation = s.location+s.getRangeLength()+2;
 
-                //ZMIANA
-                System.out.println("LOCATIONSHIFT "+s.locationShift);
                 commands.addAll(generateNumber(s.locationShift));
                 commands.add(new Command(CommandType.STORE, rangeStartLocation));
-
-                commands.addAll(generateNumber(rangeEnd));
-                commands.add(new Command(CommandType.STORE, rangeEndLocation));
-
-                commands.addAll(generateNumber(location));
-                commands.add(new Command(CommandType.STORE, locationLocation));
 
             }
         }

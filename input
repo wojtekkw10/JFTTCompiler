@@ -1,19 +1,60 @@
 DECLARE
-    i, arr(-100:100)
+    i, arr(-100:100), k, l
 BEGIN
     i ASSIGN -100;
+    WRITE i;
 
-    arr(-1) ASSIGN -10;
-    arr(0) ASSIGN -1;
-    arr(1) ASSIGN 10;
-    i ASSIGN -1;
+    i ASSIGN 2 PLUS -10;
+    WRITE i;
 
-   FOR k FROM -100 TO 100 DO
-    arr(k) ASSIGN k;
-   ENDFOR
+    i ASSIGN i MINUS -90;
+    WRITE i;
 
-  FOR k FROM -100 TO 100 DO
-   WRITE arr(k);
-  ENDFOR
+    i ASSIGN 45 TIMES i;
+    WRITE i;
+
+    i ASSIGN i DIV 45;
+    WRITE i;
+
+    arr(-100) ASSIGN i;
+    WRITE arr(-100);
+
+    IF 2 EQ 2 THEN
+        WRITE 2;
+    ENDIF
+
+    i ASSIGN 3;
+    IF i NEQ 2 THEN
+        WRITE 2;
+    ELSE
+        WRITE 3;
+    ENDIF
+
+    i ASSIGN 2;
+    IF i NEQ 2 THEN
+        WRITE 2;
+    ELSE
+        WRITE 3;
+    ENDIF
+
+    i ASSIGN -10;
+    WHILE i LE 0 DO
+        IF i LE -5 THEN
+            WRITE i;
+        ENDIF
+        i ASSIGN i PLUS 1;
+    ENDWHILE
+
+    FOR b FROM -100 TO 100 DO
+        arr(b) ASSIGN 1;
+    ENDFOR
+
+    FOR b FROM 5 DOWNTO -5 DO
+        FOR v FROM 0 TO 10 DO
+            arr(b) ASSIGN arr(b) TIMES 2;
+        ENDFOR
+        WRITE arr(b);
+    ENDFOR
+
 
 END

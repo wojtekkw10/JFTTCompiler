@@ -730,6 +730,10 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
             symbolTable.remove(iterator_name);
 
+            memoryManager.removeVariable(a);
+            memoryManager.removeVariable(b);
+            memoryManager.removeVariable(iterator);
+
         }
         else if(ctx.DOWNTO()!=null){
             //FOR PIDENTIFIER FROM value DOWNTO value DO commands ENDFOR
@@ -767,6 +771,10 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             generatedCode.get(conditionEndLine - 1).argument = instructionEndLine;
 
             symbolTable.remove(iterator_name);
+
+            memoryManager.removeVariable(a);
+            memoryManager.removeVariable(b);
+            memoryManager.removeVariable(iterator);
         }
         return 0;
 
@@ -900,8 +908,8 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
             commands.add(new Command(CommandType.STOREI, memoryLocation));
 
 
-            //memoryManager.removeVariable(tmp);
-            //memoryManager.removeVariable(tmp2);
+            memoryManager.removeVariable(tmp);
+            memoryManager.removeVariable(tmp2);
         } else{
             //n;
             String name = id.PIDENTIFIER(0).getText();
