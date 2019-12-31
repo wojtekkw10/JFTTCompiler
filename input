@@ -1,7 +1,19 @@
-[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-    n, m, reszta, potega, dzielnik(1:2)
+    i, arr(-100:100)
 BEGIN
-    WRITE 100000000000000000000;
-    n ASSIGN 100000000000000000000000000;
+    i ASSIGN -100;
+
+    arr(-1) ASSIGN -10;
+    arr(0) ASSIGN -1;
+    arr(1) ASSIGN 10;
+    i ASSIGN -1;
+
+   FOR k FROM -100 TO 100 DO
+    arr(k) ASSIGN k;
+   ENDFOR
+
+  FOR k FROM -100 TO 100 DO
+   WRITE arr(k);
+  ENDFOR
+
 END

@@ -3,6 +3,7 @@ package compiler.GrammarParser;
 import org.antlr.v4.runtime.Token;
 import parser.JFTTParser;
 
+import static java.lang.Math.abs;
 import static parser.JFTTLexer.FOR;
 import static parser.JFTTLexer.PIDENTIFIER;
 
@@ -81,7 +82,10 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
                 errors.add(new Error(line, "Number out of long long scope"));
             }
 
-            if(number > largestNumber) largestNumber = number;
+            if(abs(number) > largestNumber) {
+                if(number<0) largestNumber = -number;
+                else largestNumber = number;
+            }
         }
     }
 

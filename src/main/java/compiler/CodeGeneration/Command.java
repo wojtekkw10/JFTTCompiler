@@ -1,8 +1,8 @@
 package compiler.CodeGeneration;
 
 public class Command {
-    CommandType command;
-    long argument;
+    public CommandType command;
+    public long argument;
     String comment;
 
     Command(CommandType command, long argument){

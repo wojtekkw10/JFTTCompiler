@@ -6,6 +6,8 @@ import parser.JFTTParser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.lang.Math.abs;
+
 public class ParserManager {
     ArrayList<ErrorDetector> errorDetectors = new ArrayList<>();
     HashMap<String, Symbol> symbolTable = new HashMap<>();
@@ -32,7 +34,10 @@ public class ParserManager {
                syntaxErrors = true;
                break;
            }
-           if(errorDetector.largestNumber>largestNumber) largestNumber = errorDetector.largestNumber;
+           if(abs(errorDetector.largestNumber)>largestNumber) {
+               if(errorDetector.largestNumber < 0) largestNumber = -errorDetector.largestNumber;
+               else largestNumber = errorDetector.largestNumber;
+           }
 
            //reset the parser to point at the beginning
            parser.reset();

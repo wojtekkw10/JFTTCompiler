@@ -1,5 +1,6 @@
 package compiler.CodeGeneration;
 
+import compiler.CodeOptimizer;
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -44,11 +45,15 @@ public class CodeGeneratorManager {
                 long rangeEnd = s.getRangeEnd();
                 long location = s.location;
 
+                s.locationShift = -s.getRangeStart()+s.location;
+
                 long rangeStartLocation = s.location+s.getRangeLength();
                 long rangeEndLocation = s.location+s.getRangeLength()+1;
                 long locationLocation = s.location+s.getRangeLength()+2;
 
-                commands.addAll(generateNumber(rangeStart));
+                //ZMIANA
+                System.out.println("LOCATIONSHIFT "+s.locationShift);
+                commands.addAll(generateNumber(s.locationShift));
                 commands.add(new Command(CommandType.STORE, rangeStartLocation));
 
                 commands.addAll(generateNumber(rangeEnd));
@@ -91,6 +96,8 @@ public class CodeGeneratorManager {
             //generatedCode.add(new Command(CommandType.LOAD, i));
             //generatedCode.add(new Command(CommandType.PUT, 0));
         }
+
+        //CodeOptimizer.optimize(generatedCode);
 
         generatedCode.add(new Command(CommandType.HALT, 0));
 

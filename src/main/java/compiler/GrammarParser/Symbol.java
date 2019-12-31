@@ -17,6 +17,8 @@ public class Symbol{
 
     public long location;
 
+    public long locationShift = 0;
+
     public Symbol(IdentifierType type, String name){
         this.name = name;
         this.type = type;
