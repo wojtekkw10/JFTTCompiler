@@ -5,6 +5,7 @@ package compiler;
 import compiler.CodeGeneration.CodeGeneratorManager;
 import compiler.GrammarParser.ParserManager;
 import compiler.GrammarParser.UndeclaredVariableErrorDetector;
+import compiler.GrammarParser.UninitializedVariableErrorDetector;
 import compiler.GrammarParser.VariableRedefinitionErrorDetector;
 import compiler.ProgramArgumentParser.ArgParser;
 import compiler.ProgramArgumentParser.BaseArgParser;
@@ -31,6 +32,8 @@ public class App {
         ParserManager parserManager = new ParserManager();
         parserManager.addErrorDetector(new VariableRedefinitionErrorDetector());
         parserManager.addErrorDetector(new UndeclaredVariableErrorDetector());
+        parserManager.addErrorDetector(new UninitializedVariableErrorDetector());
+
         parserManager.runAll(parser);
 
         if(parserManager.getErrors().size()>0 || parserManager.syntaxErrors) {

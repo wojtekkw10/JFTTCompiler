@@ -2,7 +2,10 @@
 DECLARE
 	tab(-21:0), x, q, w, j, k, n, m, mm
 BEGIN
-	n ASSIGN 5 TIMES 5;
+	n ASSIGN 5 TIMES q;
 	WRITE n;
+	FOR i FROM k TO n DO
+	WRITE i;
+	ENDFOR
 END
 
