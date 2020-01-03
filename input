@@ -1,44 +1,22 @@
-[ program3.imp ]
+[ program5.imp ]
 DECLARE
-	a, b, i
+  tab(-499999999:499999999), a, b, c, d, n
 BEGIN
-	READ a;
-	i ASSIGN 1;
-	WHILE i LEQ 1000 DO
-		b ASSIGN 25663607 PLUS 41445257;
-		a ASSIGN b PLUS a;
-  		i ASSIGN i PLUS 1;
-	ENDWHILE
-	WRITE a;
+  READ a;
+  tab(a) ASSIGN 9;
 
-    READ a;
-	i ASSIGN -1;
-	DO
-		b ASSIGN -25663607 MINUS 41445257;
-        a ASSIGN b PLUS a;
-  		i ASSIGN i MINUS 1;
-    WHILE i GE -1000
-    ENDDO
-	WRITE a;
+  n ASSIGN 499999999;
+  tab(n) ASSIGN tab(a);
 
-	READ a;
-	FOR ii FROM 1234567830 DOWNTO 1234567801 DO
-		a ASSIGN a TIMES 1024;
-	ENDFOR
-	WRITE a;
-	WRITE i;
+  b ASSIGN  111111111;
+  b ASSIGN b TIMES tab(a);
 
-    READ a;
-	FOR ii FROM -1234567830 TO -1234567801 DO
-		a ASSIGN a TIMES -1024;
-	ENDFOR
-	WRITE a;
-	WRITE i;
+  c ASSIGN 90909090;
+  READ d;
 
-    a ASSIGN 1999999999 TIMES 1999999997;
-	WRITE a;
-
-	a ASSIGN -1999999999 TIMES -1999999997;
-	WRITE a;
+  tab(a) ASSIGN b MINUS c;
+  tab(n) ASSIGN tab(a) DIV d;
+  WRITE tab(a);
+  WRITE tab(n);
 END
 

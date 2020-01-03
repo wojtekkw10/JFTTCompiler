@@ -167,7 +167,7 @@ public class CodeGeneratorManager {
 
         if(maxPower>4){
             for(int i=5; i<= maxPower; i++){
-                generatedCode.add(new Command(CommandType.ADD, arrayIndex-1, "Generating "+(int)((Math.pow(2.0, i)))));
+                generatedCode.add(new Command(CommandType.ADD, arrayIndex-1, "Generating 2^"+i));
                 generatedCode.add(new Command(CommandType.STORE, arrayIndex));
                 arrayIndex++;
             }
