@@ -48,7 +48,7 @@ public class App {
             int largestPowerOf2 = (int) Math.ceil(Math.log(largestNumber)/Math.log(2));
             System.out.println("POWER: "+largestPowerOf2);
             System.out.println("POWER: "+largestNumber);
-            codeGeneratorManager.assignIdentifierLocations(largestPowerOf2);
+            codeGeneratorManager.assignIdentifierLocations(64);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode(true));

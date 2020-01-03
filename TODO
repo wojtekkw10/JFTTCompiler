@@ -28,6 +28,8 @@ DOING:
 
 TODO:
 - unit tests
-- multiplication and division by 2 to shifts
+- multiplication and division by 2 to shifts (negative numbers)
 - optimize array access
 - wrong parameters in FOR loop
+-negative times negative
+- zamiana kolejnosci mnozenia zeby bylo szybciej

@@ -178,11 +178,6 @@ public class CodeGeneratorManager {
                 symbolTable.put("2^"+i, s);
             }
         }
-
-
-
-
-
     }
 
     private ArrayList<Command> generateNumber(long number){
@@ -190,7 +185,7 @@ public class CodeGeneratorManager {
         ArrayList<Command> commands = new ArrayList<>();
         commands.add(new Command(CommandType.SUB, 0));
 
-        Boolean isNegative = false;
+        boolean isNegative = false;
         if(number<0) {
             number = -number;
             isNegative = true;
@@ -205,7 +200,6 @@ public class CodeGeneratorManager {
                 if(isNegative) commands.add(new Command(CommandType.SUB, loc));
                 else commands.add(new Command(CommandType.ADD, loc));
             }
-
         }
 
         return commands;

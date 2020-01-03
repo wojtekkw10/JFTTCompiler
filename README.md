@@ -20,7 +20,13 @@ sudo make install
 make vm
 ```
 
-## To build and run jar file
+## To build and run jar file on the input file
 ```shell script
 make run
 ```
+
+## Directories
+build/libs/compiler-all.jar - the compiler 
+src/main/antlr - grammar 
+src/main/java/parser - generated grammar in Java by ANTLR 
+src/main/java/compiler - compiler source files 

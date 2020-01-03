@@ -1023,15 +1023,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         //Copy variables to tmp memory
         generatedCode.add(new Command(CommandType.LOAD, b.location));
         generatedCode.add(new Command(CommandType.STORE, remaining.location));
-        // if remaining < 0 remaining = - remaining
-        long line = generatedCode.size();
-        generatedCode.add(new Command(CommandType.JPOS, line+7));
-        generatedCode.add(new Command(CommandType.SUB, remaining.location));
-        generatedCode.add(new Command(CommandType.SUB, remaining.location));
-        generatedCode.add(new Command(CommandType.STORE, remaining.location));
-        generatedCode.add(new Command(CommandType.SUB, 0));
-        generatedCode.add(new Command(CommandType.INC, 0));
-        generatedCode.add(new Command(CommandType.STORE, isNegative.location));
 
         //Clean the variables
         generatedCode.add(new Command(CommandType.SUB, 0));
@@ -1041,6 +1032,32 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
         generatedCode.add(new Command(CommandType.INC, 0));
         generatedCode.add(new Command(CommandType.STORE, multiplier.location));
+
+        // if remaining < 0 remaining = - remaining
+
+        generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+        long line = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JPOS, line+7));
+        generatedCode.add(new Command(CommandType.SUB, remaining.location));
+        generatedCode.add(new Command(CommandType.SUB, remaining.location));
+        generatedCode.add(new Command(CommandType.STORE, remaining.location));
+        generatedCode.add(new Command(CommandType.SUB, 0));
+        generatedCode.add(new Command(CommandType.INC, 0));
+        generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
+        generatedCode.add(new Command(CommandType.LOAD, a.location));
+        long line2 = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JPOS, line2+7));
+        generatedCode.add(new Command(CommandType.SUB, a.location));
+        generatedCode.add(new Command(CommandType.SUB, a.location));
+        generatedCode.add(new Command(CommandType.STORE, a.location));
+        generatedCode.add(new Command(CommandType.LOAD, isNegative.location));
+        generatedCode.add(new Command(CommandType.DEC, 0));
+        generatedCode.add(new Command(CommandType.STORE, isNegative.location));
+
+
+
 
         //while(mnożnik - left <= 0) mnożnik *= 2;
 
