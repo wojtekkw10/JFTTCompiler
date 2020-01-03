@@ -1016,6 +1016,20 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
         Symbol a = memoryManager.getFreeSpace();
         Symbol isNegative = memoryManager.getFreeSpace();
 
+        //lepiej jak pierwsza większa
+        generatedCode.add(new Command(CommandType.LOAD, a1.location));
+        generatedCode.add(new Command(CommandType.SUB, b.location));
+        int line00 = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JPOS, line00+6));
+        //Copy variables to tmp memory in reverse
+        generatedCode.add(new Command(CommandType.LOAD, b.location));
+        generatedCode.add(new Command(CommandType.STORE, a.location));
+        generatedCode.add(new Command(CommandType.LOAD, a1.location));
+        generatedCode.add(new Command(CommandType.STORE, remaining.location));
+        int line01 = generatedCode.size();
+        generatedCode.add(new Command(CommandType.JUMP, line01+5));
+
+
         //Copy variables to tmp memory
         generatedCode.add(new Command(CommandType.LOAD, a1.location));
         generatedCode.add(new Command(CommandType.STORE, a.location));

@@ -11,7 +11,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
         if(ctx.FOR()!=null){
             String name = ctx.PIDENTIFIER().getText();
             int line = ctx.getStart().getLine();
-            if(symbolTable.containsKey(name)) errors.add(new Error(line, "Iterator name: "+name+" redefinition"));
+            if(symbolTable.containsKey(name)) errors.add(new Error(line, "Iterator name "+name+" redefinition"));
             else {
                 Symbol s = new Symbol(IdentifierType.VARIABLE, name);
                 s.isIterator = true;
@@ -30,8 +30,7 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
         else if(ctx.READ()!=null){
             String name = ctx.identifier().PIDENTIFIER(0).getText();
             int line = ctx.getStart().getLine();
-            //TODO: check if not array
-            if(symbolTable.get(name)!= null)  symbolTable.get(name).isInitialized = true;
+            if(symbolTable.get(name)!= null && !symbolTable.get(name).isArray())  symbolTable.get(name).isInitialized = true;
         }
     }
 
