@@ -22,6 +22,7 @@ DONE:
 - division by 0
 - array index out of range Error
 - number out of LONG scope
+- negative times negative
 
 DOING:
 
@@ -31,5 +32,5 @@ TODO:
 - multiplication and division by 2 to shifts (negative numbers)
 - optimize array access
 - wrong parameters in FOR loop
--negative times negative
+
 - zamiana kolejnosci mnozenia zeby bylo szybciej
