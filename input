@@ -1,11 +1,14 @@
-[ progrm14.imp - insertion sort ]
 DECLARE
-	tab(-21:0), x, q, w, j, k, n, m, mm
+	a,b,c,d
 BEGIN
-	n ASSIGN 5 TIMES q;
-	WRITE n;
-	FOR i FROM k TO n DO
-	WRITE i;
-	ENDFOR
+    a ASSIGN -5 TIMES 1;
+    WRITE a;
+
+
+
+
+
+
+
 END
 

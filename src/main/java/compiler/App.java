@@ -38,7 +38,9 @@ public class App {
 
         if(parserManager.getErrors().size()>0 || parserManager.syntaxErrors) {
             //Printing errors
-            if(parserManager.getErrors().size()>0) System.out.println(parserManager.printErrors());
+            if(parserManager.getErrors().size()>0) {
+                System.out.println(parserManager.printErrors());
+            }
             return;
         }
         else{

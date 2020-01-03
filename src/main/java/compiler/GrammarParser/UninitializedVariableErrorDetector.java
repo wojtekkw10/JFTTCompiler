@@ -24,7 +24,7 @@ public class UninitializedVariableErrorDetector extends ErrorDetector {
         if(ctx.NUM()==null){
             int line = ctx.getStart().getLine();
             String variable = ctx.identifier().PIDENTIFIER(0).getText();
-            if(!symbolTable.get(variable).isInitialized) errors.add(new Error(line, "Variable "+variable+" not initialized"));
+            if(symbolTable.containsKey(variable) && !symbolTable.get(variable).isInitialized) errors.add(new Error(line, "Variable "+variable+" not initialized"));
         }
     }
 

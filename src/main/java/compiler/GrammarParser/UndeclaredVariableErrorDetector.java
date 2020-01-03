@@ -10,19 +10,28 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     public void enterCommand(JFTTParser.CommandContext ctx) {
         if(ctx.FOR()!=null){
             String name = ctx.PIDENTIFIER().getText();
-            Symbol s = new Symbol(IdentifierType.VARIABLE, name);
-            symbolTable.put(name, s);
+            int line = ctx.getStart().getLine();
+            if(symbolTable.containsKey(name)) errors.add(new Error(line, "Iterator name: "+name+" redefinition"));
+            else {
+                Symbol s = new Symbol(IdentifierType.VARIABLE, name);
+                s.isIterator = true;
+                symbolTable.put(name, s);
+            }
+
 
         }
         else if(ctx.ASSIGN()!=null){
             String name = ctx.identifier().PIDENTIFIER(0).getText();
-            String v1 = ctx.expression().value(0).getText();
-            String v2 = null;
-            if(ctx.expression().value(1)!=null) v2 = ctx.expression().value(1).getText();
             int line = ctx.getStart().getLine();
 
             if(symbolTable.get(name)!= null && symbolTable.get(name).isIterator) errors.add(new Error(line, "Iterator "+name+" updated"));
 
+        }
+        else if(ctx.READ()!=null){
+            String name = ctx.identifier().PIDENTIFIER(0).getText();
+            int line = ctx.getStart().getLine();
+            //TODO: check if not array
+            if(symbolTable.get(name)!= null)  symbolTable.get(name).isInitialized = true;
         }
     }
 
@@ -48,23 +57,33 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     public void exitCommand(JFTTParser.CommandContext ctx) {
         if(ctx.FOR()!=null){
             String name = ctx.PIDENTIFIER().getText();
+            if(symbolTable.get(name).isIterator)
             symbolTable.remove(name);
+
         }
     }
 
     @Override
     public void enterIdentifier(JFTTParser.IdentifierContext ctx) {
         String name1 = ctx.PIDENTIFIER(0).getText();
+        String name2 = null;
+        if(ctx.PIDENTIFIER(1)!= null) name2 = ctx.PIDENTIFIER(1).getText();
         int line = ctx.getToken(PIDENTIFIER,0).getSymbol().getLine();
 
-        if((ctx.PIDENTIFIER(1) == null && ctx.NUM()== null ) && symbolTable.get(name1).isArray()) addError(new Error(line, "Array "+name1+" used as a variable"));
+        if(ctx.PIDENTIFIER(1)!= null && !symbolTable.containsKey(name2)) addError(new Error(line, "Variable "+name2+" undeclared"));
+
+        if(ctx.PIDENTIFIER(1)!= null && symbolTable.containsKey(name2) && symbolTable.get(name2).isArray) addError(new Error(line, "Array "+name2+" used as a variable"));
+
+        if((ctx.PIDENTIFIER(1) == null && ctx.NUM()== null ) && symbolTable.containsKey(name1) && symbolTable.get(name1).isArray()) {
+            addError(new Error(line, "Array "+name1+" used as a variable"));
+        }
 
         if(ctx.PIDENTIFIER(1) != null || ctx.NUM()!=null) {
             if(symbolTable.containsKey(name1) && !symbolTable.get(name1).isArray()) addError(new Error(line, "Variable "+name1+" used as an array"));
         }
 
 
-        if(ctx.NUM()!=null)
+        if(ctx.NUM()!=null && symbolTable.get(name1).isArray())
         {
             String name = ctx.PIDENTIFIER(0).getText();
             long index = Long.parseLong(ctx.NUM().getText());
