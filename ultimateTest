@@ -47,9 +47,13 @@ BEGIN
 	[positive DIV positive]
 	a ASSIGN a DIV b; [a = 176]
 	[positive DIV negative]
-	a ASSIGN a DIV c; [a = 22]
+	a ASSIGN a DIV c; [a = -22]
+	WRITE a;
 	[Division by 0]
 	a ASSIGN a DIV 0; [a = 0]
+	WRITE a;
+	a ASSIGN a MOD 0; [a = 0]
+	WRITE a;
 
 	a ASSIGN 10;
 
@@ -69,70 +73,71 @@ BEGIN
 	WRITE a; [a = -6]
 
 	[CONDITIONALS]
-	IF a EQ -6 THEN a ASSIGN -7; ENDIF [a = -7]
-	IF a EQ -8 THEN a ASSIGN -8; ENDIF [a = -7]
-	IF a NEQ -8 THEN a ASSIGN -9; ENDIF [a = -9]
-	IF a NEQ -9 THEN a ASSIGN -10; ENDIF [a = -10]
-	IF a LE 0 THEN a ASSIGN -11; ENDIF [a = -11]
-	IF a LE -11 THEN a ASSIGN -12; ENDIF [ a = -11]
-	IF a GE -12 THEN a ASSIGN -13; ENDIF [a = -13]
-	IF a GE -13 THEN a ASSIGN -14; ENDIF [a = -13]
-	IF a LEQ -13 THEN a ASSIGN -15; ENDIF [a = -15]
-	IF a LEQ -6 THEN a ASSIGN -16; ENDIF [a = -16]
-	IF a LEQ -17 THEN a ASSIGN -17; ENDIF [a = -16]
-	IF a GEQ -16 THEN a ASSIGN -18; ENDIF [a = -18]
-	IF a GEQ -25 THEN a ASSIGN -19; ENDIF [a = -19]
-	IF a GEQ -5 THEN a ASSIGN -20; ENDIF [a = -19]
+	IF a EQ -6 THEN a ASSIGN a PLUS 1; ENDIF [a = -5]
+	IF a EQ -8 THEN a ASSIGN a PLUS 2; ENDIF [a = -5]
+	IF a NEQ -8 THEN a ASSIGN a PLUS 3; ENDIF [a = -2]
+	IF a NEQ -2 THEN a ASSIGN a PLUS 4; ENDIF [a = -2]
 
-	WRITE a; [a = -19]
+	IF a LE 0 THEN a ASSIGN a PLUS 5; ENDIF [a = 3]
+	IF a LE 3 THEN a ASSIGN a PLUS 6; ENDIF [a = 3]
+	IF a GE 2 THEN a ASSIGN a PLUS 7; ENDIF [a = 10]
+	IF a GE 10 THEN a ASSIGN a PLUS 8; ENDIF [a = 10]
+	IF a LEQ -3 THEN a ASSIGN a PLUS 9; ENDIF [a = 10]
+	IF a LEQ 10 THEN a ASSIGN a PLUS 10; ENDIF [a = 20]
+	IF a LEQ 15 THEN a ASSIGN a PLUS 11; ENDIF [a = 20]
+	IF a GEQ 20 THEN a ASSIGN a PLUS 12; ENDIF [a = 32]
+	IF a GEQ 20 THEN a ASSIGN a PLUS 13; ENDIF [a = 45]
+	IF a GEQ 60 THEN a ASSIGN a PLUS 14; ENDIF [a = 45]
+
+	WRITE a; [a = 45]
 
 	[IF ELSE]
 	IF a EQ a THEN
-	    a ASSIGN -20;
+	    a ASSIGN a PLUS 1;
 	ELSE
-	    a ASSIGN -21;
+	    a ASSIGN a PLUS 2;
 	ENDIF
-	[a = -20]
+	[a = 46]
 
-	IF a NEQ b THEN
-	    a ASSIGN -22;
+	IF a NEQ a THEN
+	    a ASSIGN a PLUS 3;
 	ELSE
-	    a ASSIGN -23;
+	    a ASSIGN a PLUS 4;
 	ENDIF
-	[a = -23]
+	[a = 50]
 
 	IF a EQ a THEN
 	    IF a EQ a THEN
 	        IF a NEQ b THEN
 	            IF a NEQ a THEN
-	                a ASSIGN -24;
+	                a ASSIGN a PLUS 5;
 	            ELSE
-	                a ASSIGN -25;
+	                a ASSIGN a PLUS 6;
 	            ENDIF
 	        ELSE
-	            a ASSIGN -26;
+	            a ASSIGN a PLUS 7;
 	        ENDIF
 	    ELSE
 	        IF a EQ a THEN
-	            a ASSIGN -26;
+	            a ASSIGN a PLUS 8;
 	        ELSE
-	            a ASSIGN -27;
+	            a ASSIGN a PLUS 9;
 	        ENDIF
 	    ENDIF
 	ENDIF
 
-	WRITE a; [a = -25]
+	WRITE a; [a = 56]
 
 
     [ LOOPS ]
 
-	WHILE a LE 25 DO
+	WHILE a LE 70 DO
 	    a ASSIGN a PLUS 1;
 	ENDWHILE
 
 	DO
 	    a ASSIGN a PLUS 1;
-	WHILE a LE 40 ENDDO
+	WHILE a LE 80 ENDDO
 
 	FOR l FROM -5 TO 5 DO
 	    a ASSIGN a PLUS l;
@@ -142,13 +147,43 @@ BEGIN
 	    a ASSIGN a MINUS l;
 	ENDFOR
 
-	WRITE a; [a = 40]
+	WRITE a; [a = 80]
+
+	[SPECIAL]
+	a ASSIGN 33 DIV 7
+	WRITE a; [a = 4]
+	a ASSIGN -33 DIV 7
+    WRITE a; [a = -5]
+    a ASSIGN 33 DIV -7
+    WRITE a; [a = -5]
+    a ASSIGN -33 DIV -7
+    WRITE a; [a = 4]
+
+    a ASSIGN 33 MOD 7
+    WRITE a; [a = 5]
+    a ASSIGN -33 MOD 7
+    WRITE a; [a = 2]
+    a ASSIGN 33 MOD -7
+    WRITE a; [a = -2]
+    a ASSIGN -33 MOD -7
+    WRITE a; [a = -5]
 
 END
 
 [ RESULTS ]
+[ > -22 ]
+[ >  0  ]
+[ >  0  ]
 [ > -6  ]
-[ > -19 ]
-[ > -25 ]
-[ > -40 ]
+[ >  45 ]
+[ > 56 ]
+[ > 80 ]
 
+[ >  4  ]
+[ >  -5 ]
+[ >  -5 ]
+[ >  4  ]
+[ >  5  ]
+[ >  2  ]
+[ > -2  ]
+[ > -5  ]

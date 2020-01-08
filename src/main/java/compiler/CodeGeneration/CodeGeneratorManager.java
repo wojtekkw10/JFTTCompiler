@@ -1,6 +1,5 @@
 package compiler.CodeGeneration;
 
-import compiler.CodeOptimizer;
 import compiler.GrammarParser.Symbol;
 import compiler.MemoryManager;
 import org.antlr.v4.runtime.tree.ParseTree;

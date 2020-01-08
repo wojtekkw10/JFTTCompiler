@@ -49,11 +49,7 @@ public class App {
 
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
-            long largestNumber = parserManager.getLargestNumber();
-            int largestPowerOf2 = (int) Math.ceil(Math.log(largestNumber)/Math.log(2));
-            System.out.println("POWER: "+largestPowerOf2);
-            System.out.println("POWER: "+largestNumber);
-            codeGeneratorManager.assignIdentifierLocations(65);
+            codeGeneratorManager.assignIdentifierLocations(64);
 
             codeGeneratorManager.generateCode();
             System.out.println(codeGeneratorManager.printGeneratedCode(true));
@@ -91,6 +87,8 @@ public class App {
         }
 
         System.out.println(wynik);
+
+        System.out.println(20%(-7));
 
 
     }
