@@ -105,24 +105,35 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 //        }
 
                 //expression -> value TIMES value
+                if(expr.value(1).NUM()!=null && Long.parseLong(expr.value(1).NUM().getText())==2){
+                    generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                    generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location));
+                    generatedCode.addAll(generateStoreCodeForIdentifier(id));
+                }
+                else if(expr.value(0).NUM()!=null && Long.parseLong(expr.value(0).NUM().getText())==2) {
+                    generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                    generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("2^0").location));
+                    generatedCode.addAll(generateStoreCodeForIdentifier(id));
+                }
+                else {
+                    Symbol a = memoryManager.getFreeSpace();
+                    Symbol b = memoryManager.getFreeSpace();
 
-                Symbol a = memoryManager.getFreeSpace();
-                Symbol b = memoryManager.getFreeSpace();
+                    //Copy variables to tmp memory
+                    generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
+                    generatedCode.add(new Command(CommandType.STORE, a.location));
 
-                //Copy variables to tmp memory
-                generatedCode.addAll(generateLoadCodeForValue(expr.value(0)));
-                generatedCode.add(new Command(CommandType.STORE, a.location));
+                    //Copy variables to tmp memory
+                    generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
+                    generatedCode.add(new Command(CommandType.STORE, b.location));
 
-                //Copy variables to tmp memory
-                generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
-                generatedCode.add(new Command(CommandType.STORE, b.location));
+                    generateMultiplicationCode(a, b);
 
-                generateMultiplicationCode(a,b);
+                    generatedCode.addAll(generateStoreCodeForIdentifier(id));
 
-                generatedCode.addAll(generateStoreCodeForIdentifier(id));
-
-                memoryManager.removeVariable(a);
-                memoryManager.removeVariable(b);
+                    memoryManager.removeVariable(a);
+                    memoryManager.removeVariable(b);
+                }
 
             }
             else if(expr.DIV()!=null){

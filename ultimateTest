@@ -4,8 +4,8 @@ BEGIN
     [ Array Operations ]
 	i(-5) ASSIGN 5;
 	i(5) ASSIGN 4;
-	a ASSIGN i(-5);
-	b ASSIGN i(5);
+	a ASSIGN i(-5); [ a = 5 ]
+	b ASSIGN i(5); [ b = 4 ]
 	c ASSIGN -8;
 
 	[Expressions]
@@ -60,17 +60,20 @@ BEGIN
 	[MOD]
 	[positive MOD positive]
 	a ASSIGN a MOD b; [a = 2]
+	a ASSIGN a TIMES 10; [ a = 20 ]
 	[negative MOD positive]
-	a ASSIGN -10 MOD a; [a = 0]
-	a ASSIGN a PLUS b; [a = 4]
-	a ASSIGN a TIMES -5; [a = -20]
+	a ASSIGN -35 MOD a; [a = 5]
+	a ASSIGN a PLUS b; [a = 9]
+	a ASSIGN a TIMES -5; [a = -45]
 	[negative MOD negative]
-	a ASSIGN a MOD -3; [a = -2]
-	a ASSIGN a TIMES -10; [a = 20]
+	a ASSIGN a MOD -12; [a = -9]
+	a ASSIGN a TIMES -10; [a = 90]
 	[positive MOD negative]
-	a ASSIGN a MOD -7; [a = -6]
+	a ASSIGN a MOD -7; [a = -1]
 
-	WRITE a; [a = -6]
+	WRITE a; [a = -1]
+
+	a ASSIGN -6;
 
 	[CONDITIONALS]
 	IF a EQ -6 THEN a ASSIGN a PLUS 1; ENDIF [a = -5]
@@ -150,22 +153,22 @@ BEGIN
 	WRITE a; [a = 80]
 
 	[SPECIAL]
-	a ASSIGN 33 DIV 7
+	a ASSIGN 33 DIV 7;
 	WRITE a; [a = 4]
-	a ASSIGN -33 DIV 7
+	a ASSIGN -33 DIV 7;
     WRITE a; [a = -5]
-    a ASSIGN 33 DIV -7
+    a ASSIGN 33 DIV -7;
     WRITE a; [a = -5]
-    a ASSIGN -33 DIV -7
+    a ASSIGN -33 DIV -7;
     WRITE a; [a = 4]
 
-    a ASSIGN 33 MOD 7
+    a ASSIGN 33 MOD 7;
     WRITE a; [a = 5]
-    a ASSIGN -33 MOD 7
+    a ASSIGN -33 MOD 7;
     WRITE a; [a = 2]
-    a ASSIGN 33 MOD -7
+    a ASSIGN 33 MOD -7;
     WRITE a; [a = -2]
-    a ASSIGN -33 MOD -7
+    a ASSIGN -33 MOD -7;
     WRITE a; [a = -5]
 
 END
@@ -174,10 +177,10 @@ END
 [ > -22 ]
 [ >  0  ]
 [ >  0  ]
-[ > -6  ]
-[ >  45 ]
-[ > 56 ]
-[ > 80 ]
+[ > -1  ]
+[ > 45 ]
+[ > 56  ]
+[ > 80  ]
 
 [ >  4  ]
 [ >  -5 ]
