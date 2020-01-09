@@ -66,8 +66,12 @@ public class UndeclaredVariableErrorDetector extends ErrorDetector {
     public void enterIdentifier(JFTTParser.IdentifierContext ctx) {
         String name1 = ctx.PIDENTIFIER(0).getText();
         String name2 = null;
-        if(ctx.PIDENTIFIER(1)!= null) name2 = ctx.PIDENTIFIER(1).getText();
         int line = ctx.getToken(PIDENTIFIER,0).getSymbol().getLine();
+
+        if(!symbolTable.containsKey(name1)) addError(new Error(line, "Variable "+name1+" undeclared"));
+
+        if(ctx.PIDENTIFIER(1)!= null) name2 = ctx.PIDENTIFIER(1).getText();
+
 
         if(ctx.PIDENTIFIER(1)!= null && !symbolTable.containsKey(name2)) addError(new Error(line, "Variable "+name2+" undeclared"));
 

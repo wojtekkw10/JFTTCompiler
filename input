@@ -1,62 +1,6 @@
+[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-    [redefinition of a]
-    [redefinition of i]
-	a,b,c,d,e,f,g,h, i(-5:5), i, a, i(2:2), k(-1000:1000)
+    n, m(2:5)
 BEGIN
-    [uninitialized variable]
-    WRITE a;
-
-    [uninitialized variable]
-    a ASSIGN a PLUS 1;
-
-    [undeclared variable]
-    WRITE aa;
-
-    [Wrong array scope]
-    a ASSIGN k(-1001);
-
-    [no error]
-    READ a;
-    WRITE a;
-
-    [Not used correctly]
-    WRITE b(5);
-
-    [Not used correctly]
-    WRITE k(i);
-
-    [Not used correctly]
-    WRITE k;
-
-    [undeclared i]
-    FOR y FROM 0 TO 9 DO
-      k(y) ASSIGN y TIMES y;
-    ENDFOR
-    a ASSIGN k(y);
-
-    [uninitialized variable]
-    FOR i FROM a DOWNTO b DO
-    	c ASSIGN h PLUS i;
-    	h ASSIGN a TIMES 7;
-    ENDFOR
-
-    [incorrect iterator name]
-    FOR a FROM a DOWNTO b DO
-        c ASSIGN h PLUS a;
-        h ASSIGN a TIMES 7;
-    ENDFOR
-    WRITE a;
-
-    [iterator modified]
-    FOR ds FROM 1 DOWNTO 2 DO
-        ds ASSIGN ds PLUS 1;
-    ENDFOR
-
-
-
-
-
-
-
+    READ m;
 END
-

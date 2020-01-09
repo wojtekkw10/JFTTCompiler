@@ -143,14 +143,83 @@ ADD 64   # Generating 2^63
 STORE 65
 ADD 65   # Generating 2^64
 STORE 66
+SUB 0
+ADD 8
+ADD 2
+STORE 166
+SUB 0   # Generating number: 100
+ADD 8
+ADD 7
+ADD 4
+STORE 168   # Storing n
+LOAD 168   # Loading n
+STORE 170
+STORE 169
+SUB 0   # Generating number: 2
+ADD 3
+STORE 171
+LOAD 169
+SUB 171
+JNEG 175
+SUB 0   # Generating number: 1
+ADD 2
+STORE 173   # Storing sito(i)
+LOAD 169
+ADD 166
+STORE 172
+LOAD 173
+STOREI 172
+LOAD 169
+DEC
+STORE 169
+JUMP 160
+SUB 0   # Generating number: 2
+ADD 3
+STORE 170
+STORE 169
+LOAD 168   # Loading n
+STORE 171
+LOAD 169
+SUB 171
+JPOS 224
+LOAD 169   # Loading sito(i)
+ADD 166
+LOADI 0
+STORE 172   # Condition sito(i)NEQ0
 SUB 0   # Generating number: 0
-STORE 67   # Storing a
-LOAD 67   # Loading a
-STORE 69   # Adding aPLUS2048
-SUB 0   # Generating number: 2048
-ADD 13
-ADD 69
-STORE 67   # Storing a
-LOAD 67   # Loading a
-PUT   # WRITE a
+STORE 173
+LOAD 172
+SUB 173
+JZERO 220
+LOAD 169   # Loading i
+STORE 172   # Adding iPLUSi
+LOAD 169   # Loading i
+ADD 172
+STORE 167   # Storing j
+LOAD 167   # Loading j
+STORE 172   # Condition jLEQn
+LOAD 168   # Loading n
+STORE 173
+LOAD 172
+SUB 173
+JPOS 218
+SUB 0   # Generating number: 0
+STORE 173   # Storing sito(j)
+LOAD 167
+ADD 166
+STORE 172
+LOAD 173
+STOREI 172
+LOAD 167   # Loading j
+STORE 172   # Adding jPLUSi
+LOAD 169   # Loading i
+ADD 172
+STORE 167   # Storing j
+JUMP 198
+LOAD 169   # Loading i
+PUT   # WRITE i
+LOAD 169
+INC
+STORE 169
+JUMP 181
 HALT
