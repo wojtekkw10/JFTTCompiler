@@ -13,10 +13,7 @@ public class UninitializedVariableErrorDetector extends ErrorDetector {
             s.isInitialized = true;
             symbolTable.put(name, s);
         }
-        else if(ctx.ASSIGN()!=null) {
-            String name = ctx.identifier().PIDENTIFIER(0).getText();
-            symbolTable.get(name).isInitialized = true;
-        }
+
     }
 
     @Override
@@ -34,5 +31,10 @@ public class UninitializedVariableErrorDetector extends ErrorDetector {
             String name = ctx.PIDENTIFIER().getText();
             symbolTable.remove(name);
         }
+        else if(ctx.ASSIGN()!=null) {
+            String name = ctx.identifier().PIDENTIFIER(0).getText();
+            symbolTable.get(name).isInitialized = true;
+        }
+
     }
 }

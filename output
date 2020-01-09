@@ -143,51 +143,14 @@ ADD 64   # Generating 2^63
 STORE 65
 ADD 65   # Generating 2^64
 STORE 66
-GET
+SUB 0   # Generating number: 0
 STORE 67   # Storing a
 LOAD 67   # Loading a
-STORE 69   # Condition aGEQ0
-SUB 0   # Generating number: 0
-STORE 70
-LOAD 69
-SUB 70
-JNEG 192
-LOAD 67   # Loading a
-STORE 69   # Condition aGE0
-SUB 0   # Generating number: 0
-STORE 70
-LOAD 69
-SUB 70
-JNEG 192
-JZERO 192
-LOAD 67   # Loading a
-SHIFT 1
-STORE 68   # Storing b
-LOAD 68   # Loading b
-SHIFT 2
-STORE 68   # Storing b
-LOAD 67   # Loading a
-STORE 69   # Condition aGEb
-LOAD 68   # Loading b
-STORE 70
-LOAD 69
-SUB 70
-JNEG 179
-JZERO 179
-SUB 0   # Generating number: 1
-ADD 2
-PUT   # WRITE 1
-LOAD 67   # Loading a
-STORE 69
-LOAD 68   # Loading b
-STORE 70
-LOAD 69
-SUB 70
-JPOS 188
-SUB 0   # Generating number: 0
-PUT   # WRITE 0
-LOAD 67   # Loading a
-SHIFT 1
+STORE 69   # Adding aPLUS2048
+SUB 0   # Generating number: 2048
+ADD 13
+ADD 69
 STORE 67   # Storing a
-JUMP 154
+LOAD 67   # Loading a
+PUT   # WRITE a
 HALT
