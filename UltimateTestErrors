@@ -6,6 +6,9 @@ BEGIN
     [uninitialized variable]
     WRITE a;
 
+    [uninitialized variable]
+    a ASSIGN a PLUS 1;
+
     [undeclared variable]
     WRITE aa;
 
