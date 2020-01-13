@@ -171,6 +171,13 @@ BEGIN
     a ASSIGN -33 MOD -7;
     WRITE a; [a = -5]
 
+    a ASSIGN -1 DIV 2;
+    WRITE a; [a = -1]
+    a ASSIGN 1 DIV -2;
+    WRITE a; [a = -1]
+    a ASSIGN -1 MOD 1;
+    WRITE a; [a = 0]
+
 END
 
 [ RESULTS ]
@@ -190,3 +197,8 @@ END
 [ >  2  ]
 [ > -2  ]
 [ > -5  ]
+
+[ > -1  ]
+[ > -1  ]
+[ >  0  ]
+

@@ -166,11 +166,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("-2^0").location));
                     generatedCode.addAll(generateStoreCodeForIdentifier(id));
                 }
-                else if(expr.value(0).NUM()!=null && Long.parseLong(expr.value(0).NUM().getText())==2) {
-                    generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
-                    generatedCode.add(new Command(CommandType.SHIFT, symbolTable.get("-2^0").location));
-                    generatedCode.addAll(generateStoreCodeForIdentifier(id));
-                }
                 else {
                     Symbol multiplier = memoryManager.getFreeSpace();
                     Symbol remaining = memoryManager.getFreeSpace();
@@ -178,6 +173,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     Symbol shiftCounter = memoryManager.getFreeSpace();
                     Symbol b = memoryManager.getFreeSpace();
                     Symbol isNegative = memoryManager.getFreeSpace();
+                    Symbol bOriginal = memoryManager.getFreeSpace();
 
                     //isNegative is by default false aka = 0
                     generatedCode.add(new Command(CommandType.SUB, 0, "Dividing "+expr.getText()));
@@ -203,6 +199,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     //Copy variables to tmp memory
                     generatedCode.addAll(generateLoadCodeForValue(expr.value(1)));
                     generatedCode.add(new Command(CommandType.STORE, b.location));
+                    generatedCode.add(new Command(CommandType.STORE, bOriginal.location));
 
                     // IF b == 0 return 0
                     long line3 = generatedCode.size();
@@ -318,21 +315,21 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     generatedCode.add(new Command(CommandType.STORE, result.location));
 
                     //if b == 0 return 0
-                    generatedCode.add(new Command(CommandType.LOAD, b.location));
+                    generatedCode.add(new Command(CommandType.LOAD, bOriginal.location, "RETURN 0"));
                     long line5 = generatedCode.size();
-                    generatedCode.add(new Command(CommandType.JPOS, line5+4));
-                    generatedCode.add(new Command(CommandType.JNEG, line5+4));
+                    generatedCode.add(new Command(CommandType.JPOS, line5+5));
+                    generatedCode.add(new Command(CommandType.JNEG, line5+5));
                     generatedCode.add(new Command(CommandType.SUB, 0));
                     generatedCode.add(new Command(CommandType.STORE, result.location));
+                    generatedCode.add(new Command(CommandType.JUMP, line5+12));
 
                     //if result<0 then result--;
 
                     generatedCode.add(new Command(CommandType.LOAD, result.location, "IF result of div < 0 AND remaining > 0 THEN result--;"));
                     long line6 = generatedCode.size();
-                    generatedCode.add(new Command(CommandType.JPOS, line6+7));
-                    generatedCode.add(new Command(CommandType.JZERO, line6+7));
+                    generatedCode.add(new Command(CommandType.JPOS, line6+6));
                     generatedCode.add(new Command(CommandType.LOAD, remaining.location));
-                    generatedCode.add(new Command(CommandType.JZERO, line6+7));
+                    generatedCode.add(new Command(CommandType.JZERO, line6+6));
                     generatedCode.add(new Command(CommandType.LOAD, result.location));
                     generatedCode.add(new Command(CommandType.DEC,0));
                     generatedCode.add(new Command(CommandType.STORE,result.location));
@@ -352,6 +349,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     memoryManager.removeVariable(shiftCounter);
                     memoryManager.removeVariable(b);
                     memoryManager.removeVariable(isNegative);
+                    memoryManager.removeVariable(bOriginal);
                 }
 
 
