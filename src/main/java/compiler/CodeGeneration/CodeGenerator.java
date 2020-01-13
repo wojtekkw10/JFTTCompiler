@@ -335,10 +335,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                     generatedCode.add(new Command(CommandType.STORE,result.location));
 
 
-
-
-
-
                     generatedCode.add(new Command(CommandType.LOAD, result.location));
                     generatedCode.addAll(generateStoreCodeForIdentifier(id));
 
@@ -410,8 +406,43 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
                 // IF b == 0 return 0
                 long line3 = generatedCode.size();
-                generatedCode.add(new Command(CommandType.LOAD, b.location));
-                generatedCode.add(new Command(CommandType.JZERO, line3+64));
+                generatedCode.add(new Command(CommandType.LOAD, b.location, "MOD RETURN 0"));
+                generatedCode.add(new Command(CommandType.JPOS, line3+6));
+                generatedCode.add(new Command(CommandType.JNEG, line3+6));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, line3+105));
+
+                //IF b == 1 return 0
+                long line14 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location, "MOD RETURN 0 BO 1"));
+                generatedCode.add(new Command(CommandType.DEC, b.location));
+                generatedCode.add(new Command(CommandType.JPOS, line14+7));
+                generatedCode.add(new Command(CommandType.JNEG, line14+7));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, line3+105));
+
+                //IF b == -1 return 0
+                long line15 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, b.location, "MOD RETURN 0 BO -1"));
+                generatedCode.add(new Command(CommandType.INC, b.location));
+                generatedCode.add(new Command(CommandType.JPOS, line15+7));
+                generatedCode.add(new Command(CommandType.JNEG, line15+7));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, line3+105));
+
+                //IF a == 0 return 0
+                long line16 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location, "MOD RETURN 0 BO a = 0"));
+                generatedCode.add(new Command(CommandType.JPOS, line16+6));
+                generatedCode.add(new Command(CommandType.JNEG, line16+6));
+                generatedCode.add(new Command(CommandType.SUB, 0));
+                generatedCode.add(new Command(CommandType.STORE, remaining.location));
+                generatedCode.add(new Command(CommandType.JUMP, line3+105));
+
+
 
                 //IF b < 0 flip it
                 long line1 = generatedCode.size();
@@ -511,6 +542,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.SUB, b.location));
                 generatedCode.add(new Command(CommandType.JUMP, loopLine));
 
+
                 // the sign of the rem
                 generatedCode.add(new Command(CommandType.LOAD, sameSign.location));
                 long line2 = generatedCode.size();
@@ -549,13 +581,6 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 //else then rem = rem
 
 
-                //if b == 0 return 0
-                generatedCode.add(new Command(CommandType.LOAD, b.location));
-                long line5 = generatedCode.size();
-                generatedCode.add(new Command(CommandType.JPOS, line5+4));
-                generatedCode.add(new Command(CommandType.JNEG, line5+4));
-                generatedCode.add(new Command(CommandType.SUB, 0));
-                generatedCode.add(new Command(CommandType.STORE, remaining.location));
 
 
 
@@ -563,8 +588,7 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
 
 
 
-
-                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location, "MOD LOAD rem"));
                 generatedCode.addAll(generateStoreCodeForIdentifier(id));
 
                 memoryManager.removeVariable(tmp2);
