@@ -30,3 +30,6 @@ build/libs/compiler-all.jar - the compiler
 src/main/antlr - grammar 
 src/main/java/parser - generated grammar in Java by ANTLR 
 src/main/java/compiler - compiler source files 
+
+## Warning
+DIV and MOD algorithms use numbers greater than the inputs. May cause problems on the non-cln virtual machine.
