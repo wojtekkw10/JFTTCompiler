@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class ArgParser extends BaseArgParser {
 
     @Override
-    public void parse(String[] args) {
+    public boolean parse(String[] args) {
         String inputFilename;
         String outputFilename;
 
@@ -19,21 +19,21 @@ public class ArgParser extends BaseArgParser {
             outputFilename = args[1];
         } else {
             System.err.println("> Error: Not enough parameters");
-            return;
+            return false;
         }
 
         //Check if the arguments are not empty
         HashMap<String, String> result;
         if( inputFilename.isEmpty() || outputFilename.isEmpty() ) {
             System.err.println("> Error: Empty parameters");
-            return;
+            return false;
         }
         else {
             //Check if input file exists
             File inputFile = new File(inputFilename);
             if( !inputFile.exists() )  {
                 System.err.println("> Error: Input file does not exist");
-                return;
+                return false;
             }
             else {
                 //If everything ok then return filenames
@@ -44,8 +44,10 @@ public class ArgParser extends BaseArgParser {
                 } catch (IOException e) {
                     System.err.println("> Error: Couldn't load the input file");
                     e.printStackTrace();
+                    return false;
                 }
             }
         }
+        return true;
     }
 }

@@ -7,7 +7,7 @@ public abstract class BaseArgParser {
     String inputFilename = "";
     CharStream charStream;
 
-    public abstract void parse(String[] input);
+    public abstract boolean parse(String[] input);
 
     public String getInputFilename() {
         return inputFilename;

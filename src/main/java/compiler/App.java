@@ -22,9 +22,12 @@ public class App {
     public static void main(String[] args){
         //Parsing program parameters
         BaseArgParser argumentParser = new ArgParser();
-        argumentParser.parse(args);
+        boolean result = argumentParser.parse(args);
 
         //Creating Lexer
+        if(!result){
+            return;
+        }
         JFTTLexer lexer = new JFTTLexer(argumentParser.getCharStream());
         JFTTParser parser = new JFTTParser(new CommonTokenStream(lexer));
 
@@ -63,33 +66,5 @@ public class App {
                 e.printStackTrace();
             }
         }
-
-        //Mnożenie w JAVA
-        int a = 24;
-        int b = 3;
-        int mnożnik = 1;
-        int left = a;
-        int wynik = 0;
-        int tmp2 = b;
-        while(mnożnik < left) {
-            mnożnik *= 2;
-            tmp2 *= 2;
-        }
-        while(left>=b){
-            while(tmp2 > left) {
-                //stricte wieksze
-                tmp2/=2;
-                mnożnik /= 2;
-
-            }
-            wynik += mnożnik;
-            left = left - tmp2;
-        }
-
-        System.out.println(wynik);
-
-        System.out.println(20%(-7));
-
-
     }
 }
