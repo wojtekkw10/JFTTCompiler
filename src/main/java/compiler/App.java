@@ -48,14 +48,14 @@ public class App {
         }
         else{
             //Printing the symbolTable
-            System.out.println(parserManager.printSymbolTable());
+            //System.out.println(parserManager.printSymbolTable());
 
             //Generate code
             CodeGeneratorManager codeGeneratorManager = new CodeGeneratorManager(parserManager.getSymbolTable(), parser);
             codeGeneratorManager.assignIdentifierLocations(64);
 
             codeGeneratorManager.generateCode();
-            System.out.println(codeGeneratorManager.printGeneratedCode(true));
+            //System.out.println(codeGeneratorManager.printGeneratedCode(true));
             //System.out.println(codeGeneratorManager.memoryManager.printMemory());
 
             //...
