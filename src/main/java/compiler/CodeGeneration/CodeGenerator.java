@@ -543,6 +543,11 @@ public class CodeGenerator extends JFTTBaseVisitor<Integer> {
                 generatedCode.add(new Command(CommandType.JUMP, loopLine));
 
 
+                //fix if rem != 0
+                generatedCode.add(new Command(CommandType.LOAD, remaining.location));
+                long line333 = generatedCode.size();
+                generatedCode.add(new Command(CommandType.JZERO, line333+23, "REM 0"));
+
                 // the sign of the rem
                 generatedCode.add(new Command(CommandType.LOAD, sameSign.location));
                 long line2 = generatedCode.size();

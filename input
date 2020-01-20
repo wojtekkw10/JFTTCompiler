@@ -186,7 +186,7 @@ BEGIN
     WRITE a; [a = 0]
     a ASSIGN 0 MOD 1;
     WRITE a; [a = 0]
-    a ASSIGN 2 MOD -1;
+    a ASSIGN 2 MOD -2;
     WRITE a; [a = 0]
 
 END
