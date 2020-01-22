@@ -23,14 +23,17 @@ DONE:
 - array index out of range Error
 - number out of LONG scope
 - negative times negative
+- zamiana kolejnosci mnozenia zeby bylo
+- wrong parameters in FOR loop
+- multiplication and division by 2 to shifts (negative numbers)
+- optimize array access
 
 DOING:
 
 
 TODO:
 - unit tests
-- multiplication and division by 2 to shifts (negative numbers)
-- optimize array access
-- wrong parameters in FOR loop
 
-- zamiana kolejnosci mnozenia zeby bylo szybciej
+
+
+

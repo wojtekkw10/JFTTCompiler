@@ -1,221 +1,28 @@
+[ Rozklad liczby na czynniki pierwsze ]
 DECLARE
-	a,b,c,d,e,f,g,h, i(-5:5)
+    n, m, reszta, potega, dzielnik
 BEGIN
-    [ Array Operations ]
-	i(-5) ASSIGN 5;
-	i(5) ASSIGN 4;
-	a ASSIGN i(-5); [ a = 5 ]
-	b ASSIGN i(5); [ b = 4 ]
-	c ASSIGN -8;
-
-	[Expressions]
-	[PLUS]
-	[positive PLUS positive;]
-	a ASSIGN a PLUS b; [a = 9]
-	[positive PLUS negative]
-	a ASSIGN a PLUS c; [a = 1]
-	[negative PLUS positive]
-	a ASSIGN c PLUS a; [a = -7]
-	[negative PLUS negative]
-	a ASSIGN a PLUS c; [a = -15]
-
-	[MINUS]
-	[negative MINUS negative]
-	a ASSIGN a MINUS c; [a = -7]
-	[negative MINUS positive]
-	a ASSIGN a MINUS b; [a = -11]
-	[positive MINUS negative]
-	a ASSIGN b MINUS a; [a = 15]
-	[positive MINUS positive]
-	a ASSIGN a MINUS b; [a = 11]
-
-	[TIMES]
-	[positive TIMES positive]
-	a ASSIGN a TIMES b; [a = 44]
-	[positive TIMES negative]
-	a ASSIGN a TIMES c; [a = -352]
-	[negative TIMES negative]
-	a ASSIGN c TIMES a; [a = 2816]
-	[negative TIMES positive]
-	a ASSIGN c TIMES a; [a = -22528]
-
-	[DIV]
-	[negative DIV positive]
-	a ASSIGN a DIV b; [a = -5632]
-	[negative DIV negative]
-	a ASSIGN a DIV c; [a = 704]
-	[positive DIV positive]
-	a ASSIGN a DIV b; [a = 176]
-	[positive DIV negative]
-	a ASSIGN a DIV c; [a = -22]
-	WRITE a;
-	[Division by 0]
-	a ASSIGN a DIV 0; [a = 0]
-	WRITE a;
-	a ASSIGN a MOD 0; [a = 0]
-	WRITE a;
-
-	a ASSIGN 10;
-
-	[MOD]
-	[positive MOD positive]
-	a ASSIGN a MOD b; [a = 2]
-	a ASSIGN a TIMES 10; [ a = 20 ]
-	[negative MOD positive]
-	a ASSIGN -35 MOD a; [a = 5]
-	a ASSIGN a PLUS b; [a = 9]
-	a ASSIGN a TIMES -5; [a = -45]
-	[negative MOD negative]
-	a ASSIGN a MOD -12; [a = -9]
-	a ASSIGN a TIMES -10; [a = 90]
-	[positive MOD negative]
-	a ASSIGN a MOD -7; [a = -1]
-
-	WRITE a; [a = -1]
-
-	a ASSIGN -6;
-
-	[CONDITIONALS]
-	IF a EQ -6 THEN a ASSIGN a PLUS 1; ENDIF [a = -5]
-	IF a EQ -8 THEN a ASSIGN a PLUS 2; ENDIF [a = -5]
-	IF a NEQ -8 THEN a ASSIGN a PLUS 3; ENDIF [a = -2]
-	IF a NEQ -2 THEN a ASSIGN a PLUS 4; ENDIF [a = -2]
-
-	IF a LE 0 THEN a ASSIGN a PLUS 5; ENDIF [a = 3]
-	IF a LE 3 THEN a ASSIGN a PLUS 6; ENDIF [a = 3]
-	IF a GE 2 THEN a ASSIGN a PLUS 7; ENDIF [a = 10]
-	IF a GE 10 THEN a ASSIGN a PLUS 8; ENDIF [a = 10]
-	IF a LEQ -3 THEN a ASSIGN a PLUS 9; ENDIF [a = 10]
-	IF a LEQ 10 THEN a ASSIGN a PLUS 10; ENDIF [a = 20]
-	IF a LEQ 15 THEN a ASSIGN a PLUS 11; ENDIF [a = 20]
-	IF a GEQ 20 THEN a ASSIGN a PLUS 12; ENDIF [a = 32]
-	IF a GEQ 20 THEN a ASSIGN a PLUS 13; ENDIF [a = 45]
-	IF a GEQ 60 THEN a ASSIGN a PLUS 14; ENDIF [a = 45]
-
-	WRITE a; [a = 45]
-
-	[IF ELSE]
-	IF a EQ a THEN
-	    a ASSIGN a PLUS 1;
-	ELSE
-	    a ASSIGN a PLUS 2;
-	ENDIF
-	[a = 46]
-
-	IF a NEQ a THEN
-	    a ASSIGN a PLUS 3;
-	ELSE
-	    a ASSIGN a PLUS 4;
-	ENDIF
-	[a = 50]
-
-	IF a EQ a THEN
-	    IF a EQ a THEN
-	        IF a NEQ b THEN
-	            IF a NEQ a THEN
-	                a ASSIGN a PLUS 5;
-	            ELSE
-	                a ASSIGN a PLUS 6;
-	            ENDIF
-	        ELSE
-	            a ASSIGN a PLUS 7;
-	        ENDIF
-	    ELSE
-	        IF a EQ a THEN
-	            a ASSIGN a PLUS 8;
-	        ELSE
-	            a ASSIGN a PLUS 9;
-	        ENDIF
-	    ENDIF
-	ENDIF
-
-	WRITE a; [a = 56]
-
-
-    [ LOOPS ]
-
-	WHILE a LE 70 DO
-	    a ASSIGN a PLUS 1;
-	ENDWHILE
-
-	DO
-	    a ASSIGN a PLUS 1;
-	WHILE a LE 80 ENDDO
-
-	FOR l FROM -5 TO 5 DO
-	    a ASSIGN a PLUS l;
-	ENDFOR
-
-	FOR l FROM 5 DOWNTO -5 DO
-	    a ASSIGN a MINUS l;
-	ENDFOR
-
-	WRITE a; [a = 80]
-
-	[SPECIAL]
-	a ASSIGN 33 DIV 7;
-	WRITE a; [a = 4]
-	a ASSIGN -33 DIV 7;
-    WRITE a; [a = -5]
-    a ASSIGN 33 DIV -7;
-    WRITE a; [a = -5]
-    a ASSIGN -33 DIV -7;
-    WRITE a; [a = 4]
-
-    a ASSIGN 33 MOD 7;
-    WRITE a; [a = 5]
-    a ASSIGN -33 MOD 7;
-    WRITE a; [a = 2]
-    a ASSIGN 33 MOD -7;
-    WRITE a; [a = -2]
-    a ASSIGN -33 MOD -7;
-    WRITE a; [a = -5]
-
-    a ASSIGN -1 DIV 2;
-    WRITE a; [a = -1]
-    a ASSIGN 1 DIV -2;
-    WRITE a; [a = -1]
-    a ASSIGN -1 MOD 1;
-    WRITE a; [a = 0]
-    a ASSIGN 1 MOD -1;
-    WRITE a; [a = 0]
-    a ASSIGN -2 MOD 1;
-    WRITE a; [a = 0]
-
-    a ASSIGN 0 MOD 50;
-    WRITE a; [a = 0]
-    a ASSIGN 0 MOD 1;
-    WRITE a; [a = 0]
-    a ASSIGN 2 MOD -2;
-    WRITE a; [a = 0]
-
+    READ n;
+    dzielnik ASSIGN 2;
+    m ASSIGN dzielnik TIMES dzielnik;
+    WHILE n GEQ m DO
+        potega ASSIGN 0;
+        reszta ASSIGN n MOD dzielnik;
+        WHILE reszta EQ 0 DO
+            n ASSIGN n DIV dzielnik;
+            potega ASSIGN potega PLUS 1;
+            reszta ASSIGN n MOD dzielnik;
+        ENDWHILE
+        IF potega GE 0 THEN [ czy znaleziono dzielnik ]
+            WRITE dzielnik;
+            WRITE potega;
+        ELSE
+            dzielnik ASSIGN dzielnik PLUS 1;
+            m ASSIGN dzielnik TIMES dzielnik;
+        ENDIF
+    ENDWHILE
+    IF n NEQ 1 THEN [ ostatni dzielnik ]
+        WRITE n;
+        WRITE 1;
+    ENDIF
 END
-
-[ RESULTS ]
-[ > -22 ]
-[ >  0  ]
-[ >  0  ]
-[ > -1  ]
-[ > 45 ]
-[ > 56  ]
-[ > 80  ]
-
-[ >  4  ]
-[ >  -5 ]
-[ >  -5 ]
-[ >  4  ]
-[ >  5  ]
-[ >  2  ]
-[ > -2  ]
-[ > -5  ]
-
-[ > -1  ]
-[ > -1  ]
-[ >  0  ]
-[ >  0  ]
-[ >  0  ]
-
-[ >  0  ]
-[ >  0  ]
-[ >  0  ]
-

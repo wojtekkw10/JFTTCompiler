@@ -1,6 +1,9 @@
 # Compiler
 Simple compiler for JFTT class at the Wrocław University of Science and Technology
 
+## Author
+Wojciech Kwaśniewicz
+
 ## Dependencies
 By default the file 'input' is used as input for the compiler. 
 'output' is the output file of the compiler and the input file for the VM.
@@ -32,4 +35,5 @@ src/main/java/parser - generated grammar in Java by ANTLR
 src/main/java/compiler - compiler source files 
 
 ## Warning
-DIV and MOD algorithms use numbers greater than the inputs. May cause problems on the non-cln virtual machine.
+- internet connection is required for the first compilation
+- DIV and MOD algorithms use numbers greater than the inputs. May cause problems on the non-cln virtual machine.
