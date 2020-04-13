@@ -5,28 +5,20 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * User Manual available at https://docs.gradle.org/6.0.1/userguide/tutorial_java_projects.html
  */
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
-    }
-}
 
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
 
-    //Apply the antlr java parser generator plugin
+    //Apply the ANTLR java parser generator plugin
     id 'antlr'
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
-}
 
-//apply plugin: 'antlr'
-apply plugin: 'com.github.johnrengelman.shadow'
+    // Apply the shadow plugin to add support for creating fat jar files
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
 
 repositories {
     // Use jcenter for resolving dependencies.
