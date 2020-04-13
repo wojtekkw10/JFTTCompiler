@@ -3,7 +3,7 @@ compile:
 
 run:
 	./gradlew shadowjar
-	java -jar build/libs/compiler-all.jar input output
+	java -jar build/libs/compiler-all.jar programs/program2.imp output
 
 vm: run
 	vm/maszyna-wirtualna-cln output
@@ -11,3 +11,6 @@ vm: run
 test:
 	./gradlew test
 
+
+shadowjar:
+	./gradlew shadowjar
