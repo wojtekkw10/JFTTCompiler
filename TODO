@@ -27,6 +27,7 @@ DONE:
 - wrong parameters in FOR loop
 - multiplication and division by 2 to shifts (negative numbers)
 - optimize array access
+- added functional test
 
 DOING:
 

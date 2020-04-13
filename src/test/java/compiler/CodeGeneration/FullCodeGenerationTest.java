@@ -5,7 +5,9 @@ import compiler.GrammarParser.UndeclaredVariableErrorDetector;
 import compiler.GrammarParser.VariableRedefinitionErrorDetector;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import parser.JFTTLexer;
 import parser.JFTTParser;
 
@@ -19,8 +21,10 @@ import static org.junit.Assert.assertEquals;
 
 public class FullCodeGenerationTest {
 
-    public void testCodeGenerationForProgram(String programPath, String expectedResultPath, String inputPath) {
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
 
+    public void testCodeGenerationForProgram(String programPath, String expectedResultPath, String inputPath) {
         try {
 
             Process p2 = Runtime.getRuntime().exec(new String[]{"bash","-c","java -jar build/libs/compiler-all.jar " +
@@ -69,7 +73,13 @@ public class FullCodeGenerationTest {
         {
             e.printStackTrace();
         }
-        assertEquals(expectedlines, lines);
+
+        try {
+            assertEquals(expectedlines, lines);
+        } catch (Throwable t) {
+            collector.addError(t);
+        }
+
     }
 
     @Test
@@ -82,7 +92,7 @@ public class FullCodeGenerationTest {
             e.printStackTrace();
         }
 
-        testCodeGenerationForProgram("src/test/java/compiler/CodeGeneration/ultimateTest", "src/test/java/compiler/CodeGeneration/ultimateTestExpectedResult", "");
+        testCodeGenerationForProgram("programs/ultimateTest", "programs/ultimateTestExpectedResult", "");
         testCodeGenerationForProgram("programs/p1.imp", "programs/p1Expected", "");
         testCodeGenerationForProgram("programs/program0.imp", "programs/program0Expected", "programs/program0Input");
         testCodeGenerationForProgram("programs/program1.imp", "programs/program1Expected", "");
