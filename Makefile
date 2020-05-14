@@ -23,10 +23,11 @@ shadowjar:
 # you need these to rebuild everything
 install_dependencies: install_vm
 remove_dependencies: remove_vm remove_bison remove_flex remove_cln
+	sudo apt autoremove -y
 
 remove_cln:
-	cd cln-1.3.6/ && sudo make uninstall
-	sudo rm -r cln-1.3.6
+	-cd cln-1.3.6/; sudo make uninstall
+	-sudo rm -r cln-1.3.6
 
 remove_vm:
 	cd vm/ && make cleanall
